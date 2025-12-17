@@ -1,0 +1,171 @@
+<div class="modal fade" [class.show]="isOpen" [style.display]="isOpen ? 'block' : 'none'" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow-lg">
+
+      <!-- Header -->
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold text-primary">
+          <i class="bi bi-person-circle me-2"></i>Admin Profile
+        </h5>
+        <button type="button" class="btn-close" (click)="onClose()"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body p-4">
+
+        <!-- Loading State -->
+        <div *ngIf="loading()" class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div *ngIf="!loading() && profileData">
+
+          <!-- Profile Header with Photo Upload -->
+          <div class="profile-header text-center mb-4">
+            <div class="position-relative d-inline-block">
+              <!-- Photo Preview -->
+              <div
+                class="avatar-circle-xl bg-gradient-primary text-white d-flex align-items-center justify-content-center rounded-circle shadow-sm overflow-hidden"
+                style="width: 120px; height: 120px; font-size: 2.5rem;">
+                <img *ngIf="photoPreview" [src]="photoPreview" class="w-100 h-100 object-fit-cover"
+                  style="object-fit: cover;">
+                <span *ngIf="!photoPreview">{{ (profileData?.user?.fullName || profileData?.userData?.fullName ||
+                  profileData?.fullName)?.charAt(0)?.toUpperCase() || 'A' }}</span>
+              </div>
+
+              <!-- Upload Photo Button (only in edit mode) -->
+              <div *ngIf="editMode()">
+                <input type="file" #photoInput hidden (change)="onPhotoSelected($event)" accept="image/*">
+                <button type="button" class="btn btn-primary rounded-circle position-absolute shadow-sm"
+                  style="width: 40px; height: 40px; bottom: 0; right: 0;" (click)="photoInput.click()"
+                  title="Change Photo">
+                  <i class="bi bi-camera-fill"></i>
+                </button>
+              </div>
+            </div>
+
+            <h5 class="mt-3 mb-1">{{ profileData?.user?.fullName || profileData?.userData?.fullName ||
+              profileData?.fullName || 'Admin User' }}</h5>
+            <p class="text-muted small">{{ profileData?.user?.email || profileData?.userData?.email ||
+              profileData?.email || 'admin@example.com' }}</p>
+
+            <!-- Photo change indicator -->
+            <small *ngIf="selectedPhotoFile" class="text-success">
+              <i class="bi bi-check-circle-fill me-1"></i>
+              New photo selected: {{ selectedPhotoFile.name }}
+            </small>
+          </div>
+
+          <hr class="my-4">
+
+          <!-- Profile Form -->
+          <form [formGroup]="profileForm">
+
+            <!-- Full Name -->
+            <div class="mb-3">
+              <label class="form-label fw-medium">
+                <i class="bi bi-person-fill text-primary me-2"></i>Full Name
+              </label>
+              <input type="text" class="form-control" formControlName="fullName" [readonly]="!editMode()"
+                [class.is-invalid]="fullNameControl?.invalid && (fullNameControl?.touched || fullNameControl?.dirty)"
+                [class.form-control-plaintext]="!editMode()">
+              <div class="invalid-feedback"
+                *ngIf="fullNameControl?.errors?.['required'] && (fullNameControl?.touched || fullNameControl?.dirty)">
+                Full name is required
+              </div>
+              <div class="invalid-feedback"
+                *ngIf="fullNameControl?.errors?.['minlength'] && (fullNameControl?.touched || fullNameControl?.dirty)">
+                Name must be at least 3 characters
+              </div>
+            </div>
+
+            <!-- Email (Read-only) -->
+            <div class="mb-3">
+              <label class="form-label fw-medium">
+                <i class="bi bi-envelope-fill text-primary me-2"></i>Email Address
+              </label>
+              <input type="email" class="form-control form-control-plaintext bg-light" formControlName="email" readonly>
+            </div>
+
+            <!-- City -->
+            <div class="mb-3">
+              <label class="form-label fw-medium">
+                <i class="bi bi-geo-alt-fill text-primary me-2"></i>City
+              </label>
+              <input type="text" class="form-control" formControlName="city" [readonly]="!editMode()"
+                [class.form-control-plaintext]="!editMode()" placeholder="Enter your city">
+            </div>
+
+            <!-- Country -->
+            <div class="mb-3">
+              <label class="form-label fw-medium">
+                <i class="bi bi-flag-fill text-primary me-2"></i>Country
+              </label>
+              <input type="text" class="form-control" formControlName="country" [readonly]="!editMode()"
+                [class.form-control-plaintext]="!editMode()" placeholder="Enter your country">
+            </div>
+
+            <!-- Phone Number -->
+            <div class="mb-3">
+              <label class="form-label fw-medium">
+                <i class="bi bi-telephone-fill text-primary me-2"></i>Phone Number
+              </label>
+              <input type="tel" class="form-control" formControlName="phoneNumber" [readonly]="!editMode()"
+                [class.form-control-plaintext]="!editMode()" placeholder="Enter your phone number">
+            </div>
+
+            <!-- Birth Date -->
+            <div class="mb-3">
+              <label class="form-label fw-medium">
+                <i class="bi bi-calendar-event-fill text-primary me-2"></i>Birth Date
+              </label>
+              <input type="date" class="form-control" formControlName="birthDate" [readonly]="!editMode()"
+                [class.form-control-plaintext]="!editMode()">
+            </div>
+
+            <!-- Age (Auto-calculated, Read-only) -->
+            <div class="mb-3">
+              <label class="form-label fw-medium">
+                <i class="bi bi-hourglass-split text-primary me-2"></i>Age
+              </label>
+              <div class="input-group">
+                <input type="text" class="form-control form-control-plaintext bg-light"
+                  [value]="calculatedAge !== null ? calculatedAge + ' years' : 'Not available'" readonly>
+                <span class="input-group-text bg-light border-0">
+                  <i class="bi bi-calculator text-muted" title="Auto-calculated from birth date"></i>
+                </span>
+              </div>
+              <small class="text-muted">Automatically calculated from birth date</small>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer border-0 pt-0">
+        <button type="button" class="btn btn-light" (click)="onClose()">Close</button>
+
+        <button *ngIf="!editMode()" type="button" class="btn btn-primary px-4" (click)="toggleEditMode()">
+          <i class="bi bi-pencil-fill me-2"></i>Edit Profile
+        </button>
+
+        <div *ngIf="editMode()">
+          <button type="button" class="btn btn-light me-2" (click)="toggleEditMode()">Cancel</button>
+          <button type="button" class="btn btn-success px-4 fw-bold" (click)="saveProfile()"
+            [disabled]="profileForm.invalid || saving()">
+            <span *ngIf="saving()" class="spinner-border spinner-border-sm me-2"></span>
+            <i *ngIf="!saving()" class="bi bi-check-circle-fill me-2"></i>
+            Save Changes
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show" *ngIf="isOpen"></div>

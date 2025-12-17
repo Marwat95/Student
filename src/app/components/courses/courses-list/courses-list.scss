@@ -1,0 +1,431 @@
+// Variables
+$primary-color: #2563eb;
+$secondary-color: #64748b;
+$background-color: #f8fafc;
+$text-dark: #1e293b;
+$text-light: #64748b;
+$border-color: #e2e8f0;
+$success-color: #10b981;
+$error-color: #ef4444;
+$card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+.courses-list-page {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  min-height: 100vh;
+  
+  // Background Orbs
+  .bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.3;
+    z-index: 0;
+    
+    &.orb-1 {
+      width: 400px;
+      height: 400px;
+      background: #84fab0;
+      top: -100px;
+      left: -100px;
+    }
+    
+    &.orb-2 {
+      width: 300px;
+      height: 300px;
+      background: #8fd3f4;
+      bottom: -100px;
+      right: 10%;
+    }
+    
+    &.orb-3 {
+      width: 200px;
+      height: 200px;
+      background: #06b6d4;
+      top: 30%;
+      right: -50px;
+    }
+  }
+  
+  // Back Button Container
+  .back-button-container {
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 10;
+    
+    ::ng-deep .back-button {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(30, 27, 75, 0.2);
+      color: #1e1b4b;
+      box-shadow: 0 4px 12px rgba(30, 27, 75, 0.15);
+      
+      &:hover {
+        background: white;
+        box-shadow: 0 6px 16px rgba(30, 27, 75, 0.25);
+        transform: translateY(-3px);
+      }
+      
+      .back-icon {
+        color: #1e1b4b;
+      }
+    }
+  }
+  
+  // Page Header
+  .page-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+    
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: $text-dark;
+      margin: 0 0 0.5rem 0;
+      background: linear-gradient(120deg, #1c6f2b 0%, #0b3c2b 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.3;
+    }
+    
+    p {
+      font-size: 1.2rem;
+      color: $text-light;
+      margin: 0;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  
+  // Search Section
+  .search-section {
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+    
+    .search-box {
+      display: flex;
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 50px;
+      overflow: hidden;
+      box-shadow: $card-shadow;
+      
+      .search-input {
+        flex: 1;
+        padding: 1rem 1.5rem;
+        border: none;
+        outline: none;
+        font-size: 1rem;
+        
+        &::placeholder {
+          color: $text-light;
+        }
+      }
+      
+      .search-button {
+        background: linear-gradient(120deg, #1c6f2b 0%, #0b3c2b 100%);
+        color: white;
+        border: none;
+        padding: 0 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+    }
+  }
+  
+  // Loading & Error States
+  .loading-state,
+  .error-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: $card-shadow;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #e2e8f0;
+      border-top-color: #1c6f2b;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      animation: spin 1s linear infinite;
+    }
+    
+    p {
+      color: $text-light;
+      font-size: 1.2rem;
+      margin: 0 0 1.5rem 0;
+    }
+    
+    button {
+      background: linear-gradient(120deg, #1c6f2b 0%, #0b3c2b 100%);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(28, 111, 43, 0.3);
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(28, 111, 43, 0.4);
+      }
+    }
+  }
+  
+  .error-state {
+    p {
+      color: $error-color;
+    }
+  }
+  
+  // Empty State
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: $card-shadow;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      animation: bounce 2s infinite;
+    }
+    
+    h3 {
+      font-size: 1.5rem;
+      color: $text-dark;
+      margin: 1rem 0;
+      font-weight: 700;
+    }
+    
+    p {
+      color: $text-light;
+      margin: 0.5rem 0 1.5rem;
+    }
+  }
+  
+  // Courses Grid
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  
+  // Course Card
+  .course-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: $card-shadow;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: $hover-shadow;
+    }
+    
+    .course-thumbnail {
+      height: 180px;
+      overflow: hidden;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+    }
+    
+    .course-content {
+      padding: 1.5rem;
+      
+      .course-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: $text-dark;
+        margin: 0 0 0.75rem 0;
+        line-height: 1.4;
+      }
+      
+      .course-description {
+        color: $text-light;
+        margin: 0 0 1rem 0;
+        line-height: 1.5;
+      }
+      
+      .course-meta {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        
+        .instructor,
+        .rating {
+          font-size: 0.9rem;
+          color: $text-light;
+        }
+      }
+      
+      .course-stats {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+        color: $text-light;
+      }
+      
+      .course-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        .course-price {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: $primary-color;
+        }
+        
+        .popular-badge {
+          background: linear-gradient(120deg, #f59e0b 0%, #d97706 100%);
+          color: white;
+          padding: 0.25rem 0.75rem;
+          border-radius: 20px;
+          font-size: 0.8rem;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+  
+  // Pagination
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    position: relative;
+    z-index: 1;
+    
+    .pagination-button {
+      background: white;
+      border: 1px solid $border-color;
+      color: $text-dark;
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: $card-shadow;
+      
+      &:hover:not(:disabled) {
+        background: #f1f5f9;
+        transform: translateY(-2px);
+      }
+      
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+    
+    .pagination-info {
+      color: $text-light;
+      font-weight: 500;
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .courses-list-page {
+    padding: 1.5rem 1rem;
+    
+    .page-header {
+      h1 {
+        font-size: 2rem;
+      }
+      
+      p {
+        font-size: 1rem;
+      }
+    }
+    
+    .search-section {
+      .search-box {
+        flex-direction: column;
+        border-radius: 16px;
+        
+        .search-input {
+          padding: 1rem;
+          border-bottom: 1px solid $border-color;
+        }
+        
+        .search-button {
+          padding: 1rem;
+          border-radius: 0 0 16px 16px;
+        }
+      }
+    }
+    
+    .courses-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    
+    .pagination {
+      flex-direction: column;
+      gap: 1rem;
+      
+      .pagination-button {
+        width: 100%;
+      }
+    }
+  }
+}

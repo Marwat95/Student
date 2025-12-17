@@ -1,0 +1,46 @@
+<footer class="app-footer">
+  <div class="footer-content">
+    <!-- Right Section: Contact -->
+    <div class="footer-section footer-contact">
+      <div class="section-title">للتواصل مع فريق MAHD Learning</div>
+      <div class="phone">{{ phone }}</div>
+      <div class="social-icons">
+        <a *ngFor="let link of socialLinksRight" [href]="link.url" target="_blank" rel="noopener" 
+           class="social-icon" [title]="link.label">
+          {{ link.icon }}
+        </a>
+      </div>
+    </div>
+
+    <!-- Middle Section: Design & Dev -->
+    <div class="footer-section footer-design">
+      <div class="section-title">تصميم و تطوير</div>
+      <ul>
+        <li *ngFor="let item of designDev">
+          <a [href]="item.url">{{ item.label }}</a>
+        </li>
+      </ul>
+      <div class="social-icons">
+        <a *ngFor="let link of socialLinks" [href]="link.url" target="_blank" rel="noopener" 
+           class="social-icon" [title]="link.label">
+          {{ link.icon }}
+        </a>
+      </div>
+    </div>
+
+    <!-- Left Section: Secondary Stages -->
+    <div class="footer-section footer-stages">
+      <div class="section-title">المراحل الثانوية</div>
+      <ul>
+        <li *ngFor="let stage of secondaryStages">
+          <a [href]="stage.url">{{ stage.label }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Copyright -->
+  <div class="footer-copyright">
+    <p>All copy rights reserved {{ currentYear }} © MAHD Learning - جميع الحقوق محفوظة</p>
+  </div>
+</footer>

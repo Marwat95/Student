@@ -1,0 +1,22 @@
+/* Remove default padding and margins to make app full width */
+.container-fluid {
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: 0;
+  margin-right: 0;
+  max-width: 100%;
+}
+
+/* Ensure all child components take full width */
+.container-fluid > * {
+  width: 100%;
+}
+
+/* Override any default Bootstrap container constraints */
+.container-fluid .container {
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: 0;
+  margin-right: 0;
+}

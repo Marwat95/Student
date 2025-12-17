@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معاينة الكروت - Admin Pages</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+            padding: 2rem;
+            direction: ltr;
+        }
+        .section-title {
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #007bff;
+        }
+        
+        /* Users Card Styles */
+        .user-card {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+        }
+        .user-avatar-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 2rem;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            margin: 0 auto;
+        }
+        .role-badge {
+            bottom: 0;
+            right: -10px;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Instructor Card Styles */
+        .instructor-card {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .instructor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+        }
+        .instructor-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #6f42c1 0%, #a855f7 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 2rem;
+            box-shadow: 0 4px 12px rgba(111, 66, 193, 0.3);
+            margin: 0 auto;
+        }
+        
+        /* Course Card Styles */
+        .course-card {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+        }
+        .course-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            margin: 0 auto;
+        }
+        
+        /* Ticket Card Styles */
+        .ticket-card {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .ticket-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+        }
+        .ticket-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            margin: 0 auto;
+            color: white;
+        }
+        .ticket-icon-open {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        .ticket-icon-assigned {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        .ticket-icon-resolved {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .status-badge {
+            bottom: -5px;
+            right: -10px;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">🎨 معاينة الكروت في صفحات الإدارة</h1>
+        
+        <!-- Users Section -->
+        <h2 class="section-title">👥 Users Management Cards</h2>
+        <div class="row g-4 mb-5">
+            <!-- User Card 1 -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="user-card card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="user-avatar-wrapper mb-3">
+                            <div class="user-avatar">A</div>
+                            <span class="role-badge badge rounded-pill position-absolute bg-primary">Admin</span>
+                        </div>
+                        <div class="user-info">
+                            <h5 class="card-title mb-1 fw-bold">Ahmed Mohamed</h5>
+                            <p class="text-muted small mb-1">@ahmed123</p>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-envelope me-1"></i>ahmed@example.com
+                            </p>
+                            <p class="text-muted small mb-3">
+                                <i class="bi bi-calendar me-1"></i>Joined Dec 10, 2024
+                            </p>
+                        </div>
+                        <div class="action-buttons d-flex gap-2 justify-content-center">
+                            <button class="btn btn-sm btn-outline-primary flex-fill">
+                                <i class="bi bi-pencil me-1"></i>Edit
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger flex-fill">
+                                <i class="bi bi-trash me-1"></i>Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- User Card 2 -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="user-card card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="user-avatar-wrapper mb-3">
+                            <div class="user-avatar">S</div>
+                            <span class="role-badge badge rounded-pill position-absolute bg-info">Instructor</span>
+                        </div>
+                        <div class="user-info">
+                            <h5 class="card-title mb-1 fw-bold">Sara Ali</h5>
+                            <p class="text-muted small mb-1">@sara_ali</p>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-envelope me-1"></i>sara@example.com
+                            </p>
+                            <p class="text-muted small mb-3">
+                                <i class="bi bi-calendar me-1"></i>Joined Dec 8, 2024
+                            </p>
+                        </div>
+                        <div class="action-buttons d-flex gap-2 justify-content-center">
+                            <button class="btn btn-sm btn-outline-primary flex-fill">
+                                <i class="bi bi-pencil me-1"></i>Edit
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger flex-fill">
+                                <i class="bi bi-trash me-1"></i>Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- User Card 3 -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="user-card card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="user-avatar-wrapper mb-3">
+                            <div class="user-avatar">M</div>
+                            <span class="role-badge badge rounded-pill position-absolute bg-secondary">Student</span>
+                        </div>
+                        <div class="user-info">
+                            <h5 class="card-title mb-1 fw-bold">Mohamed Hassan</h5>
+                            <p class="text-muted small mb-1">@mohamed_h</p>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-envelope me-1"></i>mohamed@example.com
+                            </p>
+                            <p class="text-muted small mb-3">
+                                <i class="bi bi-calendar me-1"></i>Joined Dec 5, 2024
+                            </p>
+                        </div>
+                        <div class="action-buttons d-flex gap-2 justify-content-center">
+                            <button class="btn btn-sm btn-outline-primary flex-fill">
+                                <i class="bi bi-pencil me-1"></i>Edit
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger flex-fill">
+                                <i class="bi bi-trash me-1"></i>Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Instructors Section -->
+        <h2 class="section-title">👨‍🏫 Instructors Management Cards</h2>
+        <div class="row g-4 mb-5">
+            <!-- Instructor Card 1 -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="instructor-card card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="instructor-avatar-wrapper mb-3 position-relative d-inline-block">
+                            <div class="instructor-avatar">H</div>
+                            <span class="status-badge badge bg-success rounded-pill position-absolute">
+                                <i class="bi bi-check-circle-fill me-1"></i>Active
+                            </span>
+                        </div>
+                        <div class="instructor-info">
+                            <h5 class="card-title mb-1 fw-bold">Dr. Hassan Ali</h5>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-envelope me-1"></i>hassan@example.com
+                            </p>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-briefcase me-1"></i>Computer Science
+                            </p>
+                            <p class="text-primary small mb-3 fw-semibold">
+                                <i class="bi bi-book me-1"></i>5 Courses
+                            </p>
+                        </div>
+                        <div class="action-buttons d-flex gap-2 justify-content-center">
+                            <button class="btn btn-sm btn-outline-primary flex-fill">
+                                <i class="bi bi-pencil me-1"></i>Edit
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger flex-fill">
+                                <i class="bi bi-trash me-1"></i>Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Instructor Card 2 -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="instructor-card card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="instructor-avatar-wrapper mb-3 position-relative d-inline-block">
+                            <div class="instructor-avatar">F</div>
+                            <span class="status-badge badge bg-success rounded-pill position-absolute">
+                                <i class="bi bi-check-circle-fill me-1"></i>Active
+                            </span>
+                        </div>
+                        <div class="instructor-info">
+                            <h5 class="card-title mb-1 fw-bold">Dr. Fatima Ahmed</h5>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-envelope me-1"></i>fatima@example.com
+                            </p>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-briefcase me-1"></i>Mathematics
+                            </p>
+                            <p class="text-primary small mb-3 fw-semibold">
+                                <i class="bi bi-book me-1"></i>3 Courses
+                            </p>
+                        </div>
+                        <div class="action-buttons d-flex gap-2 justify-content-center">
+                            <button class="btn btn-sm btn-outline-primary flex-fill">
+                                <i class="bi bi-pencil me-1"></i>Edit
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger flex-fill">
+                                <i class="bi bi-trash me-1"></i>Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Courses Section -->
+        <h2 class="section-title">📚 Courses Management Cards</h2>
+        <div class="row g-4 mb-5">
+            <!-- Course Card 1 -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="course-card card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="course-icon-wrapper mb-3 text-center position-relative d-inline-block w-100">
+                            <div class="course-icon">
+                                <i class="bi bi-book-fill"></i>
+                            </div>
+                            <span class="status-badge badge bg-success rounded-pill position-absolute">
+                                <i class="bi bi-check-circle-fill me-1"></i>Active
+                            </span>
+                        </div>
+                        <div class="course-info">
+                            <h5 class="card-title mb-2 fw-bold">Introduction to Programming</h5>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-person me-1"></i>Dr. Hassan Ali
+                            </p>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-tag me-1"></i>Programming
+                            </p>
+                            <p class="text-success fw-bold mb-3">
+                                <i class="bi bi-currency-dollar"></i>99
+                            </p>
+                        </div>
+                        <div class="action-buttons d-flex gap-2 justify-content-center">
+                            <button class="btn btn-sm btn-outline-primary flex-fill">
+                                <i class="bi bi-pencil me-1"></i>Edit
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger flex-fill">
+                                <i class="bi bi-trash me-1"></i>Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Course Card 2 -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="course-card card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="course-icon-wrapper mb-3 text-center position-relative d-inline-block w-100">
+                            <div class="course-icon">
+                                <i class="bi bi-book-fill"></i>
+                            </div>
+                            <span class="status-badge badge bg-success rounded-pill position-absolute">
+                                <i class="bi bi-check-circle-fill me-1"></i>Active
+                            </span>
+                        </div>
+                        <div class="course-info">
+                            <h5 class="card-title mb-2 fw-bold">Web Development Basics</h5>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-person me-1"></i>Dr. Fatima Ahmed
+                            </p>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-tag me-1"></i>Web Development
+                            </p>
+                            <p class="text-success fw-bold mb-3">
+                                <i class="bi bi-currency-dollar"></i>149
+                            </p>
+                        </div>
+                        <div class="action-buttons d-flex gap-2 justify-content-center">
+                            <button class="btn btn-sm btn-outline-primary flex-fill">
+                                <i class="bi bi-pencil me-1"></i>Edit
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger flex-fill">
+                                <i class="bi bi-trash me-1"></i>Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tickets Section -->
+        <h2 class="section-title">🎫 Support Tickets Cards</h2>
+        <div class="row g-4 mb-5">
+            <!-- Ticket Card 1 - Open -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="ticket-card card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="ticket-icon-wrapper mb-3 text-center position-relative d-inline-block w-100">
+                            <div class="ticket-icon ticket-icon-open">
+                                <i class="bi bi-headset"></i>
+                            </div>
+                            <span class="status-badge badge rounded-pill position-absolute bg-primary">Open</span>
+                        </div>
+                        <div class="ticket-info">
+                            <h5 class="card-title mb-2 fw-bold">Problem with Login</h5>
+                            <p class="text-muted small mb-1">
+                                <i class="bi bi-person me-1"></i>User: Ahmed Mohamed
+                            </p>
+                            <p class="text-muted small mb-3">
+                                <i class="bi bi-calendar me-1"></i>Dec 12, 2024 2:30 PM
+                            </p>
+                        </div>
+                        <div class="action-buttons d-flex gap-2 justify-content-center">
+                            <button class="btn btn-sm btn-outline-primary flex-fill">
+                                <i class="bi bi-gear me-1"></i>Manage
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger flex-fill">
+                                <i class="bi bi-trash me-1"></i>Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ticket Card 2 - Assigned -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="ticket-card card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="ticket-icon-wrapper mb-3 text-center position-relative d-inline-block w-100">
+                            <div class="ticket-icon ticket-icon-assigned">
+                                <i class="bi bi-headset"></i>
+                            </div>
+                            <span class="status-badge badge rounded-pill position-absolute bg-warning">Assigned</span>
+                        </div>
+                        <div class="ticket-info">
+                            <h5 class="card-title mb-2 fw-bold">Course Access Issue</h5>
+                            <p class="text-muted small mb-1">
+                                <i class="bi bi-person me-1"></i>User: Sara Ali
+                            </p>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-person-check me-1"></i>Assigned: Admin Name
+                            </p>
+                            <p class="text-muted small mb-3">
+                                <i class="bi bi-calendar me-1"></i>Dec 11, 2024 10:15 AM
+                            </p>
+                        </div>
+                        <div class="action-buttons d-flex gap-2 justify-content-center">
+                            <button class="btn btn-sm btn-outline-primary flex-fill">
+                                <i class="bi bi-gear me-1"></i>Manage
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger flex-fill">
+                                <i class="bi bi-trash me-1"></i>Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ticket Card 3 - Resolved -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="ticket-card card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="ticket-icon-wrapper mb-3 text-center position-relative d-inline-block w-100">
+                            <div class="ticket-icon ticket-icon-resolved">
+                                <i class="bi bi-headset"></i>
+                            </div>
+                            <span class="status-badge badge rounded-pill position-absolute bg-success">Resolved</span>
+                        </div>
+                        <div class="ticket-info">
+                            <h5 class="card-title mb-2 fw-bold">Payment Not Showing</h5>
+                            <p class="text-muted small mb-1">
+                                <i class="bi bi-person me-1"></i>User: Mohamed Hassan
+                            </p>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-person-check me-1"></i>Assigned: Admin Name
+                            </p>
+                            <p class="text-muted small mb-3">
+                                <i class="bi bi-calendar me-1"></i>Dec 10, 2024 3:45 PM
+                            </p>
+                        </div>
+                        <div class="action-buttons d-flex gap-2 justify-content-center">
+                            <button class="btn btn-sm btn-outline-primary flex-fill">
+                                <i class="bi bi-gear me-1"></i>Manage
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger flex-fill">
+                                <i class="bi bi-trash me-1"></i>Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="alert alert-success text-center mt-5">
+            <h4>✅ جميع صفحات الإدارة تعرض البيانات في كروت احترافية!</h4>
+            <p class="mb-0">هذا مثال توضيحي - الكروت الحقيقية موجودة في التطبيق على الروابط التالية:</p>
+            <ul class="list-unstyled mt-2">
+                <li><code>/admin/users</code> - إدارة المستخدمين</li>
+                <li><code>/admin/instructors</code> - إدارة المدرسين</li>
+                <li><code>/admin/courses</code> - إدارة الكورسات</li>
+                <li><code>/admin/support</code> - إدارة التذاكر</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

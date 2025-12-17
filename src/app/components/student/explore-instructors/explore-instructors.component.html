@@ -1,0 +1,110 @@
+<div class="explore-instructors-page">
+  <header class="page-header">
+    <div class="header-content">
+      <h1>Explore Instructors</h1>
+      <p>Discover top-rated instructors and find the perfect mentor for your learning journey</p>
+    </div>
+  </header>
+
+  <div class="filters-bar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input 
+        type="text" 
+        placeholder="Search instructors by name or specialization..."
+        [formControl]="searchControl"
+      >
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Finding instructors...</p>
+    </div>
+  }
+
+  @if (error()) {
+    <div class="error-state">
+      <p>{{ error() }}</p>
+      <button (click)="loadInstructors()">Try Again</button>
+    </div>
+  }
+
+  @if (!loading() && !error()) {
+    <div class="instructors-grid">
+      @for (instr of instructors(); track instr.instructorId) {
+        <div class="instructor-card" (click)="navigateToInstructor(instr.userId)">
+          <div class="card-bg"></div>
+          <div class="avatar-container">
+            @if (instr.photoUrl) {
+              <img [src]="instr.photoUrl" [alt]="instr.fullName" class="avatar-img" (error)="handleImageError($event)">
+              <!-- Fallback placeholder hidden by default, shown by error handler if needed -->
+              <div class="avatar-placeholder" style="display: none;">
+                {{ instr.fullName.charAt(0).toUpperCase() }}
+              </div>
+            } @else {
+              <div class="avatar-placeholder">
+                {{ instr.fullName.charAt(0).toUpperCase() }}
+              </div>
+            }
+          </div>
+          
+          <div class="card-content">
+            <h3 class="name">{{ instr.fullName }}</h3>
+            <p class="role">Instructor</p>
+            
+            @if (instr.bio) {
+              <p class="bio" [title]="instr.bio">
+                {{ instr.bio | slice:0:60 }}{{ instr.bio.length > 60 ? '...' : '' }}
+              </p>
+            } @else {
+              <p class="bio-placeholder">Passionate Educator</p>
+            }
+    
+            <div class="stats-row">
+              <div class="stat">
+                <span class="icon">⭐</span>
+                <span class="value">{{ instr.averageRating | number:'1.1-1' }}</span>
+              </div>
+              <div class="stat">
+                <span class="icon">📚</span>
+                <span class="value">{{ instr.coursesCount }} Courses</span>
+              </div>
+            </div>
+    
+            <button class="view-profile-btn">View Profile</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (totalPages() > 1) {
+    <div class="pagination">
+        <button 
+          [disabled]="pageNumber() === 1" 
+          (click)="changePage(pageNumber() - 1)"
+          class="page-btn prev"
+        >
+          Previous
+        </button>
+        <span class="page-info">Page {{ pageNumber() }} of {{ totalPages() }}</span>
+        <button 
+          [disabled]="pageNumber() === totalPages()" 
+          (click)="changePage(pageNumber() + 1)"
+          class="page-btn next"
+        >
+          Next
+        </button>
+    </div>
+  }
+
+  @if (!loading() && !error() && instructors().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">👥</div>
+      <h3>No instructors found</h3>
+      <p>Try adjusting your search terms</p>
+    </div>
+  }
+</div>

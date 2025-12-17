@@ -1,0 +1,135 @@
+<div class="modal-backdrop" *ngIf="isOpen" (click)="onClose()"></div>
+<div class="modal-container" *ngIf="isOpen">
+    <div class="modal-header">
+        <h3 *ngIf="step() === 1">Add New User</h3>
+        <h3 *ngIf="step() === 2">Verify Email</h3>
+        <button class="close-btn" (click)="onClose()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+        <!-- Error Alert -->
+        <div class="alert alert-error" *ngIf="error()">
+            {{ error() }}
+        </div>
+
+        <!-- Step 1: User Details -->
+        <form [formGroup]="userForm" (ngSubmit)="submitDetails()" *ngIf="step() === 1">
+
+            <!-- Profile Photo Upload -->
+            <div class="form-group text-center mb-4">
+                <div class="position-relative d-inline-block">
+                    <div class="photo-preview-circle">
+                        <img *ngIf="photoPreview" [src]="photoPreview" class="photo-preview-img">
+                        <i *ngIf="!photoPreview" class="bi bi-person-circle default-icon"></i>
+                    </div>
+                    <input type="file" #photoInput hidden (change)="onPhotoSelected($event)" accept="image/*">
+                    <button type="button" class="photo-upload-btn" (click)="photoInput.click()" title="Upload Photo">
+                        <i class="bi bi-camera-fill"></i>
+                    </button>
+                </div>
+                <small class="d-block mt-2 text-muted">
+                    {{ selectedPhotoFile ? 'Photo: ' + selectedPhotoFile.name : 'Click camera to add photo (optional)'
+                    }}
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" formControlName="name" placeholder="Full Name"
+                    [class.invalid]="nameControl?.invalid && nameControl?.touched" />
+                <small class="error-text" *ngIf="nameControl?.invalid && nameControl?.touched">Name is required (min 3
+                    chars)</small>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" formControlName="email" placeholder="user@example.com"
+                    [class.invalid]="emailControl?.invalid && emailControl?.touched" />
+                <small class="error-text" *ngIf="emailControl?.invalid && emailControl?.touched">Valid email is
+                    required</small>
+            </div>
+
+            <div class="form-group row">
+                <div class="col">
+                    <label>Password</label>
+                    <input type="password" formControlName="password" placeholder="******"
+                        [class.invalid]="passwordControl?.invalid && passwordControl?.touched" />
+                </div>
+                <div class="col">
+                    <label>Confirm</label>
+                    <input type="password" formControlName="confirmPassword" placeholder="******"
+                        [class.invalid]="confirmPasswordControl?.invalid && confirmPasswordControl?.touched" />
+                </div>
+            </div>
+            <small class="error-text" *ngIf="userForm.errors?.['mismatch'] && confirmPasswordControl?.touched">Passwords
+                do not match</small>
+
+            <div class="form-group row">
+                <div class="col">
+                    <label>City</label>
+                    <input type="text" formControlName="city" placeholder="Enter city" />
+                </div>
+                <div class="col">
+                    <label>Country</label>
+                    <input type="text" formControlName="country" placeholder="Enter country" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col">
+                    <label>Phone Number</label>
+                    <input type="tel" formControlName="phoneNumber" placeholder="+20 123 456 7890" />
+                </div>
+                <div class="col">
+                    <label>Birth Date</label>
+                    <input type="date" formControlName="birthDate" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Role</label>
+                <select formControlName="role" [class.invalid]="roleControl?.invalid && roleControl?.touched">
+                    <option value="">Select Role</option>
+                    <option value="0">Admin</option>
+                    <option value="1">Instructor</option>
+                    <option value="2">Student</option>
+                </select>
+                <small class="error-text" *ngIf="roleControl?.invalid && roleControl?.touched">Role is required</small>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="onClose()">Cancel</button>
+                <button type="submit" class="btn btn-primary" [disabled]="loading()">
+                    {{ loading() ? 'Processing...' : 'Next' }}
+                </button>
+            </div>
+        </form>
+
+        <!-- Step 2: Verification -->
+        <form [formGroup]="verificationForm" (ngSubmit)="submitVerification()" *ngIf="step() === 2">
+            <div class="verification-content">
+                <p>A verification code has been sent to <strong>{{ pendingEmail }}</strong>.</p>
+                <p>Please enter the code below to complete the user creation.</p>
+
+                <div class="form-group">
+                    <label>Verification Code</label>
+                    <input type="text" formControlName="code" placeholder="Enter Code" class="code-input"
+                        [class.invalid]="verificationForm.get('code')?.invalid && verificationForm.get('code')?.touched" />
+                    <small class="error-text"
+                        *ngIf="verificationForm.get('code')?.hasError('required') && verificationForm.get('code')?.touched">Code
+                        is required</small>
+                    <small class="error-text"
+                        *ngIf="verificationForm.get('code')?.hasError('minlength') && verificationForm.get('code')?.touched">Must
+                        be at least 6 characters</small>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="goBack()">Back</button>
+                <button type="submit" class="btn btn-success" [disabled]="loading()">
+                    {{ loading() ? 'Verifying...' : 'Verify & Add User' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,114 @@
+<div class="modal fade" [class.show]="isOpen" [style.display]="isOpen ? 'block' : 'none'" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+
+            <!-- Header -->
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-primary">
+                    <i class="bi bi-book me-2"></i>Edit Course
+                </h5>
+                <button type="button" class="btn-close" (click)="onClose()"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body p-4">
+
+                <!-- Loading State -->
+                <div *ngIf="loading()" class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div *ngIf="!loading() && course">
+                    <form [formGroup]="courseForm">
+                        <div class="row g-3">
+                            <!-- Course Image Upload - Circular Profile Style -->
+                            <div class="col-12 text-center mb-3">
+                                <div class="position-relative d-inline-block">
+                                    <img [src]="imagePreview || 'assets/default-course.png'" alt="Course image"
+                                        class="rounded-circle border border-3 border-primary"
+                                        style="width: 150px; height: 150px; object-fit: cover; cursor: pointer;"
+                                        (click)="fileInput.click()">
+                                    <button type="button"
+                                        class="btn btn-primary btn-sm rounded-circle position-absolute bottom-0 end-0"
+                                        style="width: 40px; height: 40px;" (click)="fileInput.click()">
+                                        <i class="bi bi-camera"></i>
+                                    </button>
+                                </div>
+                                <input #fileInput type="file" class="d-none" (change)="onFileSelected($event)"
+                                    accept="image/*">
+                                <div class="mt-2">
+                                    <small class="text-muted">Click to upload course image</small>
+                                </div>
+                            </div>
+
+                            <!-- Course Title -->
+                            <div class="col-12">
+                                <label class="form-label fw-medium">Course Title</label>
+                                <input type="text" class="form-control" formControlName="title"
+                                    [class.is-invalid]="titleControl?.invalid && titleControl?.touched">
+                                <div class="invalid-feedback" *ngIf="titleControl?.errors?.['required']">
+                                    Title is required
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="col-12">
+                                <label class="form-label fw-medium">Description</label>
+                                <textarea class="form-control" formControlName="description" rows="4"
+                                    [class.is-invalid]="descriptionControl?.invalid && descriptionControl?.touched"></textarea>
+                                <div class="invalid-feedback" *ngIf="descriptionControl?.errors?.['required']">
+                                    Description is required
+                                </div>
+                            </div>
+
+                            <!-- Price and Category -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">Price ($)</label>
+                                <input type="number" class="form-control" formControlName="price" min="0"
+                                    [class.is-invalid]="priceControl?.invalid && priceControl?.touched">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">Category</label>
+                                <input type="text" class="form-control" formControlName="category">
+                            </div>
+
+
+
+                            <!-- Instructor (Read-only) -->
+                            <div class="col-12">
+                                <label class="form-label fw-medium">Instructor</label>
+                                <input type="text" class="form-control bg-light" formControlName="instructorName">
+                                <small class="text-muted">Instructor cannot be changed</small>
+                            </div>
+
+                            <!-- Course Info -->
+                            <div class="col-12">
+                                <div class="alert alert-info mb-0">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    <strong>Note:</strong> For advanced editing (lessons, content, exams), please use
+                                    the Instructor Dashboard.
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-light" (click)="onClose()">Cancel</button>
+                <button type="button" class="btn btn-primary px-4 fw-bold" (click)="saveChanges()"
+                    [disabled]="courseForm.invalid || saving()">
+                    <span *ngIf="saving()" class="spinner-border spinner-border-sm me-2"></span>
+                    Save Changes
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop fade show" *ngIf="isOpen"></div>

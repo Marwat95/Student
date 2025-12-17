@@ -1,0 +1,583 @@
+// ============ CHECKOUT PAGE - SECURE PAYMENT DESIGN ============
+
+// ============ COLOR PALETTE ============
+$primary: #1c6f2b;
+$primary-dark: #0b3c2b;
+$secondary: #06b6d4;
+$success: #10b981;
+$danger: #ef4444;
+$warning: #f59e0b;
+
+$primary-gradient: linear-gradient(120deg, #1c6f2b 0%, #0b3c2b 100%);
+$success-gradient: linear-gradient(135deg, #10b981 0%, #047857 100%);
+
+$text-dark: #2d3748;
+$text-light: #718096;
+$text-lighter: #a0aec0;
+$bg-light: #f7fafc;
+$bg-white: #ffffff;
+$border-light: #e2e8f0;
+
+$card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+// ============ HOST & CONTAINER ============
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: $bg-light;
+  padding: 2.5rem 3rem;
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.checkout-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+// ============ BACKGROUND ORBS ============
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+
+  &.orb-1 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(28, 111, 43, 0.4), transparent);
+    top: -10%;
+    left: -5%;
+  }
+
+  &.orb-2 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.3), transparent);
+    bottom: -10%;
+    right: -5%;
+  }
+
+  &.orb-3 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.2), transparent);
+    top: 50%;
+    right: 10%;
+  }
+}
+
+// ============ CHECKOUT HEADER ============
+.checkout-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  animation: fadeInDown 0.6s ease-out;
+
+  .back-btn {
+    background: $bg-white;
+    border: 2px solid $border-light;
+    color: $primary;
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+
+    &:hover {
+      background: $primary;
+      color: white;
+      transform: translateX(-5px);
+      border-color: $primary;
+    }
+  }
+
+  h1 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: $text-dark;
+    margin: 0 0 0.5rem 0;
+    background: $primary-gradient;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    color: $text-light;
+    font-size: 1.05rem;
+    margin: 0;
+  }
+}
+
+// ============ STATES ============
+.state {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: $bg-white;
+  border-radius: 20px;
+  box-shadow: $card-shadow;
+  animation: slideInUp 0.4s ease-out;
+
+  &.state-loading {
+    .spinner {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border: 3px solid rgba(16, 185, 129, 0.2);
+        border-radius: 50%;
+        animation: spin 2s linear infinite;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 5px;
+        border: 3px solid transparent;
+        border-top-color: $primary;
+        border-right-color: $primary;
+        border-radius: 50%;
+        animation: spin 1s linear infinite reverse;
+      }
+    }
+
+    p {
+      color: $primary;
+      font-weight: 600;
+    }
+  }
+
+  &.state-error {
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+
+    .error-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      color: #991b1b;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  &.state-success {
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+    border: 2px solid #10b981;
+
+    .success-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: bounce 0.6s ease;
+    }
+
+    h2 {
+      font-size: 2rem;
+      color: #047857;
+      margin: 1rem 0;
+    }
+
+    p {
+      color: #065f46;
+      font-size: 1.1rem;
+    }
+
+    .redirect-message {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: $text-light;
+      animation: pulse 2s infinite;
+    }
+  }
+}
+
+// ============ CHECKOUT GRID ============
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2rem;
+  animation: fadeIn 0.6s ease-out;
+}
+
+// ============ COURSE SUMMARY ============
+.course-summary {
+  h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: $text-dark;
+    margin: 0 0 1.5rem 0;
+  }
+}
+
+.summary-card {
+  background: $bg-white;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: $card-shadow;
+  position: sticky;
+  top: 2rem;
+
+  .course-thumbnail,
+  .course-thumbnail-placeholder {
+    width: 100%;
+    height: 200px;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .course-thumbnail-placeholder {
+    background: linear-gradient(135deg, rgba(28, 111, 43, 0.1), rgba(6, 182, 212, 0.1));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+  }
+
+  .course-info {
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $text-dark;
+      margin: 0 0 0.5rem 0;
+      line-height: 1.4;
+    }
+
+    .instructor {
+      color: $text-light;
+      font-size: 0.9rem;
+      margin: 0 0 1rem 0;
+    }
+
+    .course-stats {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+
+      .stat {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: $text-dark;
+
+        .stat-icon {
+          font-size: 1.1rem;
+        }
+      }
+    }
+  }
+
+  .price-summary {
+    border-top: 2px solid $border-light;
+    padding-top: 1.5rem;
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+
+      .label {
+        font-size: 0.95rem;
+        color: $text-light;
+      }
+
+      .price {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: $text-dark;
+      }
+
+      &.total {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 2px solid $border-light;
+
+        .label {
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: $text-dark;
+        }
+
+        .price {
+          font-size: 1.8rem;
+          font-weight: 800;
+          background: $primary-gradient;
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+      }
+    }
+  }
+}
+
+// ============ PAYMENT FORM ============
+.payment-form-section {
+  h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: $text-dark;
+    margin: 0 0 1.5rem 0;
+  }
+}
+
+.payment-form {
+  background: $bg-white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: $card-shadow;
+
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    .form-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: $text-dark;
+      margin-bottom: 0.5rem;
+
+      .label-icon {
+        font-size: 1.1rem;
+      }
+    }
+
+    .form-input,
+    .form-select {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 2px solid $border-light;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      font-family: inherit;
+
+      &:focus {
+        outline: none;
+        border-color: $primary;
+        box-shadow: 0 0 0 3px rgba(28, 111, 43, 0.1);
+      }
+    }
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+  }
+
+  .expiry-inputs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .form-select {
+      flex: 1;
+    }
+
+    .separator {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: $text-light;
+    }
+  }
+
+  .security-info {
+    background: linear-gradient(135deg, rgba(28, 111, 43, 0.05), rgba(6, 182, 212, 0.05));
+    border: 1px solid rgba(28, 111, 43, 0.2);
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .security-icon {
+      font-size: 1.5rem;
+    }
+
+    p {
+      margin: 0;
+      color: $text-dark;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 1.2rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    position: relative;
+
+    .spinner-small {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+  }
+}
+
+// ============ BUTTONS ============
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+
+  &.btn-primary {
+    background: $primary-gradient;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(28, 111, 43, 0.3);
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(28, 111, 43, 0.4);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &.btn-secondary {
+    background: $bg-white;
+    color: $primary;
+    border: 2px solid $border-light;
+
+    &:hover {
+      background: $primary;
+      color: white;
+      border-color: $primary;
+    }
+  }
+}
+
+// ============ ANIMATIONS ============
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+// ============ RESPONSIVE ============
+@media (max-width: 1024px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-card {
+    position: relative;
+    top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  :host {
+    padding: 1.5rem 1rem;
+  }
+
+  .checkout-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-form {
+    padding: 1.5rem;
+  }
+}

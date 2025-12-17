@@ -1,0 +1,121 @@
+.avatar-circle.small {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+// Instructor Cards Grid Styles
+.instructors-grid {
+  margin-top: 1rem;
+}
+
+.instructor-card {
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+  }
+
+  .card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+}
+
+.instructor-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.instructor-avatar {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #6f42c1 0%, #a855f7 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 2rem;
+  box-shadow: 0 4px 12px rgba(111, 66, 193, 0.3);
+  margin: 0 auto;
+}
+
+.instructor-avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.status-badge {
+  bottom: 0;
+  right: -10px;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.instructor-card {
+  .card-title {
+    font-size: 1.1rem;
+    color: #2d3748;
+  }
+
+  .text-muted {
+    font-size: 0.85rem;
+    
+    i {
+      font-size: 0.8rem;
+    }
+  }
+
+  .instructor-info {
+    flex: 1;
+    min-height: 150px;
+  }
+
+  .action-buttons {
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+
+  .btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-weight: 500;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .instructor-avatar,
+  .instructor-avatar-img {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+
+  .instructor-card .card-body {
+    padding: 1rem;
+  }
+}

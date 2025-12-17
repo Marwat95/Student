@@ -1,0 +1,799 @@
+// Variables - Matches Admin Dashboard
+$primary: #4361ee;
+$secondary: #3f37c9;
+$sidebar-bg: #ffffff;
+$sidebar-width: 260px;
+$sidebar-collapsed-width: 70px;
+$text-color: #333;
+$text-muted: #888;
+$hover-bg: #f8f9fa;
+$active-bg: rgba($primary, 0.1);
+$active-color: $primary;
+
+// Existing variables for dashboard content
+$primary-gradient: linear-gradient(120deg, #1c6f2b 0%, #0b3c2b 100%);
+$secondary-gradient: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+$success-gradient: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+$card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+$text-dark: #2d3748;
+$text-light: #718096;
+
+:host {
+  display: block;
+}
+
+// Dashboard Specific Layout
+.dashboard-container {
+  padding: 2rem;
+  position: relative;
+}
+
+// Mobile Responsive
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+}
+
+
+
+// --- RESTORED DASHBOARD STYLES ---
+
+// Keyframes
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+
+  33% {
+    transform: translateY(-20px) translateX(10px);
+  }
+
+  66% {
+    transform: translateY(10px) translateX(-15px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes heroSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(52, 211, 153, 0.2);
+  }
+
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(52, 211, 153, 0.3);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+// Background Orbs
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.3;
+  z-index: 0;
+
+  &.orb-1 {
+    width: 400px;
+    height: 400px;
+    background: #84fab0;
+    top: -100px;
+    left: -100px;
+  }
+
+  &.orb-2 {
+    width: 300px;
+    height: 300px;
+    background: #8fd3f4;
+    bottom: -100px;
+    right: 10%;
+  }
+
+  &.orb-3 {
+    width: 200px;
+    height: 200px;
+    background: #06b6d4;
+    top: 30%;
+    right: -50px;
+  }
+}
+
+// Dashboard Header
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+
+  .page-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: $text-dark;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.3;
+
+    a {
+      background: $primary-gradient;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+      transition: all 0.3s ease;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .page-subtitle {
+    margin: 0;
+    color: $text-light;
+    font-size: 1.1rem;
+  }
+
+  .btn-primary {
+    background: $secondary-gradient;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.3);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4);
+
+      &::before {
+        width: 300px;
+        height: 300px;
+      }
+    }
+
+    &::after {
+      content: '+';
+      font-size: 1.4rem;
+      font-weight: 400;
+    }
+  }
+}
+
+// Loading & Error States
+.loading-state,
+.error-state,
+.subscription-loading,
+.subscription-error {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 20px;
+  box-shadow: $card-shadow;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  animation: fadeIn 0.6s ease-out;
+
+  p {
+    color: #718096;
+    font-size: 1.2rem;
+    margin: 0 0 1.5rem 0;
+  }
+
+  button {
+    background: $primary-gradient;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 6px 20px rgba(28, 111, 43, 0.3);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(28, 111, 43, 0.4);
+
+      &::before {
+        width: 300px;
+        height: 300px;
+      }
+    }
+  }
+}
+
+.loading-state .spinner,
+.subscription-loading .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #1c6f2b;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  animation: spin 1s linear infinite;
+}
+
+// Stats Grid
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+  z-index: 1;
+
+  .stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 20px;
+    box-shadow: $card-shadow;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: card-in 0.6s ease forwards;
+
+    @for $i from 1 through 10 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{$i * 0.1}s;
+      }
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: $primary-gradient;
+    }
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: $hover-shadow;
+    }
+
+    .stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+
+      .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+
+        &.courses {
+          background: rgba(28, 111, 43, 0.1);
+          color: #1c6f2b;
+        }
+
+        &.students {
+          background: rgba(6, 182, 212, 0.1);
+          color: #06b6d4;
+        }
+
+        &.earnings {
+          background: rgba(245, 158, 11, 0.1);
+          color: #f59e0b;
+        }
+
+        &.completion {
+          background: rgba(16, 185, 129, 0.1);
+          color: #10b981;
+        }
+      }
+
+      .stat-change {
+        font-size: 0.9rem;
+        font-weight: 600;
+        padding: 0.25rem 0.5rem;
+        border-radius: 20px;
+
+        &.positive {
+          background: rgba(16, 185, 129, 0.1);
+          color: #10b981;
+        }
+
+        &.negative {
+          background: rgba(239, 68, 68, 0.1);
+          color: #ef4444;
+        }
+      }
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: $text-dark;
+      margin: 0 0 0.5rem 0;
+      background: $primary-gradient;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .stat-label {
+      margin: 0;
+      color: $text-light;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+  }
+}
+
+// Subscription Section
+.subscription-section {
+  margin-bottom: 2.5rem;
+  position: relative;
+  z-index: 1;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $text-dark;
+      margin: 0;
+      background: $primary-gradient;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-manage {
+      background: white;
+      color: #1c6f2b;
+      border: 2px solid #1c6f2b;
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(28, 111, 43, 0.1);
+
+      &:hover {
+        background: #1c6f2b;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(28, 111, 43, 0.2);
+      }
+    }
+  }
+
+  .subscription-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: $card-shadow;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: $hover-shadow;
+    }
+
+    .subscription-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+
+      .subscription-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        background: rgba(16, 185, 129, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: #10b981;
+      }
+
+      .subscription-info {
+        h3 {
+          margin: 0 0 0.5rem 0;
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: $text-dark;
+        }
+
+        .subscription-status {
+          margin: 0;
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: #9ca3af;
+          display: inline-block;
+          padding: 0.25rem 0.75rem;
+          border-radius: 20px;
+          background: #f3f4f6;
+
+          &.active {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+          }
+        }
+      }
+    }
+
+    .subscription-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      padding: 2rem 0;
+      border-top: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 2rem;
+
+      .detail-row {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        .label {
+          color: $text-light;
+          font-size: 0.9rem;
+        }
+
+        .value {
+          color: $text-dark;
+          font-size: 1.1rem;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .btn-renew {
+      width: 100%;
+      background: $primary-gradient;
+      color: white;
+      border: none;
+      padding: 1rem;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(28, 111, 43, 0.2);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(28, 111, 43, 0.3);
+      }
+    }
+  }
+
+  .no-subscription {
+    .subscription-icon {
+      background: rgba(239, 68, 68, 0.1) !important;
+      color: #ef4444 !important;
+    }
+
+    .no-subscription-message {
+      text-align: center;
+      color: $text-light;
+      font-size: 1.1rem;
+      margin: 0 0 2rem 0;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 1rem;
+      border-radius: 12px;
+    }
+  }
+}
+
+// Top Performing Courses
+.top-courses-section {
+  margin-bottom: 2.5rem;
+  position: relative;
+  z-index: 1;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $text-dark;
+      margin: 0;
+      background: $primary-gradient;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .view-all {
+      color: #1c6f2b;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+
+      &:hover {
+        color: #0b3c2b;
+        transform: translateX(5px);
+      }
+    }
+  }
+
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .course-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 20px;
+    box-shadow: $card-shadow;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: $hover-shadow;
+    }
+
+    .course-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+
+      .course-icon {
+        width: 48px;
+        height: 48px;
+        background: rgba(6, 182, 212, 0.1);
+        color: #06b6d4;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        font-size: 1.5rem;
+      }
+
+      .course-title {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: $text-dark;
+        line-height: 1.4;
+      }
+    }
+
+    .course-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding: 1rem 0;
+      border-top: 1px solid #f1f5f9;
+      border-bottom: 1px solid #f1f5f9;
+
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+
+        .stat-label {
+          font-size: 0.8rem;
+          color: $text-light;
+        }
+
+        .stat-value {
+          font-weight: 700;
+          color: $text-dark;
+        }
+      }
+    }
+
+    .course-progress {
+      margin-bottom: 1.5rem;
+
+      .progress-bar {
+        height: 6px;
+        background: #f1f5f9;
+        border-radius: 3px;
+        overflow: hidden;
+
+        .progress-fill {
+          height: 100%;
+          background: $secondary-gradient;
+          border-radius: 3px;
+          transition: width 1s ease-out;
+        }
+      }
+    }
+
+    .btn-view-course {
+      width: 100%;
+      padding: 0.75rem;
+      background: rgba(28, 111, 43, 0.1);
+      color: #1c6f2b;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #1c6f2b;
+        color: white;
+      }
+    }
+  }
+}
+
+// Quick Actions
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
+
+  .action-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: $card-shadow;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: $hover-shadow;
+
+      .action-icon {
+        transform: scale(1.1) rotate(5deg);
+      }
+    }
+
+    .action-icon {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 1.5rem;
+      background: $primary-gradient;
+      color: white;
+      border-radius: 50%; // Circular
+      display: grid;
+      place-items: center;
+      font-size: 1.8rem; // FIXED TYPO: font-size instead of fontSize
+      box-shadow: 0 4px 15px rgba(28, 111, 43, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .action-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $text-dark;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .action-description {
+      color: $text-light;
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+}

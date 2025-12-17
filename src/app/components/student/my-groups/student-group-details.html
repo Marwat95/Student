@@ -1,0 +1,140 @@
+<div class="student-group-details-page">
+  <!-- Floating decorative elements -->
+  <div class="floating-element element-1">👥</div>
+  <div class="floating-element element-2">📚</div>
+  <div class="floating-element element-3">⭐</div>
+  <div class="floating-element element-4">💡</div>
+  
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="state state-loading">
+    <div class="spinner"></div>
+    <p>Loading group details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error() && !loading()" class="state state-error">
+    <div class="error-icon">❌</div>
+    <p><strong>Error:</strong> {{ error() }}</p>
+    <button type="button" class="btn btn-primary" (click)="loadGroupDetails(groupId() || '')">
+      <span class="btn-icon">🔄</span>
+      Retry
+    </button>
+  </div>
+
+  <!-- Group Details -->
+  <div *ngIf="!loading() && !error() && group()" class="group-details-content">
+    <!-- Header -->
+    <header class="page-header">
+      <app-back-button></app-back-button>
+      <div class="header-content">
+        <h1>{{ group()!.name }}</h1>
+        <p class="subtitle">{{ group()!.description || 'No description available' }}</p>
+      </div>
+    </header>
+
+    <!-- Group Info Cards -->
+    <section class="info-section">
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-icon">👥</div>
+          <div class="info-content">
+            <p class="info-label">Students</p>
+            <p class="info-value">{{ students().length }}</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">📚</div>
+          <div class="info-content">
+            <p class="info-label">Courses</p>
+            <p class="info-value">{{ courses().length }}</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">📅</div>
+          <div class="info-content">
+            <p class="info-label">Created</p>
+            <p class="info-value">{{ group()!.createdAt | date : 'mediumDate' }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="section">
+      <div class="section-header">
+        <h2>📚 Group Courses ({{ courses().length }})</h2>
+      </div>
+
+      <div *ngIf="courses().length === 0" class="empty-state">
+        <div class="empty-icon">📚</div>
+        <h3>No Courses Yet</h3>
+        <p>This group doesn't have any courses assigned yet.</p>
+      </div>
+
+      <div *ngIf="courses().length > 0" class="courses-grid">
+        <div
+          *ngFor="let course of courses(); trackBy: trackByCourseId"
+          class="course-card"
+          (click)="navigateToCourse(course.courseId)"
+        >
+          <div class="course-thumbnail-wrapper">
+            <img
+              *ngIf="course.thumbnailUrl"
+              [src]="course.thumbnailUrl"
+              [alt]="course.title"
+              class="course-thumbnail"
+            />
+            <div *ngIf="!course.thumbnailUrl" class="course-thumbnail-placeholder">📚</div>
+          </div>
+
+          <div class="card-content">
+            <h3 class="course-title">{{ course.title }}</h3>
+            <p class="course-description">
+              {{ course.description || 'No description available' }}
+            </p>
+            <p class="course-instructor">
+              <span class="instructor-icon">👨‍🏫</span>
+              By {{ course.instructorName || 'Unknown' }}
+            </p>
+
+            <div class="card-actions">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="navigateToCourse(course.courseId); $event.stopPropagation()"
+              >
+                <span class="btn-icon">▶️</span>
+                View Course
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Students Section -->
+    <section class="section">
+      <div class="section-header">
+        <h2>👥 Group Members ({{ students().length }})</h2>
+      </div>
+
+      <div *ngIf="students().length === 0" class="empty-state">
+        <div class="empty-icon">👥</div>
+        <h3>No Students Yet</h3>
+        <p>This group doesn't have any members yet.</p>
+      </div>
+
+      <div *ngIf="students().length > 0" class="students-grid">
+        <div *ngFor="let student of students(); trackBy: trackByStudentId" class="student-card">
+          <div class="student-avatar">
+            <span class="avatar-emoji">👨‍🎓</span>
+          </div>
+          <div class="student-info">
+            <h4 class="student-name">{{ student.fullName }}</h4>
+            <p class="student-email">{{ student.email }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

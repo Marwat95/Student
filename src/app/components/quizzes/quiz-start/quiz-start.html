@@ -1,0 +1,73 @@
+<div class="exam-page" *ngIf="!loading()">
+  <header class="page-header" *ngIf="exam() as e">
+    <h1>{{ e.title }}</h1>
+    <p class="subtitle">
+      {{ e.description }}
+    </p>
+    <div class="meta">
+      <span>{{ e.durationMinutes }} min</span>
+      <span>•</span>
+      <span>Total Marks: {{ e.totalMarks }}</span>
+    </div>
+  </header>
+
+  <!-- Loading & Error -->
+  <div *ngIf="loading()" class="state state-loading">
+    <p>Loading exam...</p>
+  </div>
+
+  <div *ngIf="error() && !loading()" class="state state-error">
+    <p>{{ error() }}</p>
+  </div>
+
+  <!-- Questions -->
+  <div *ngIf="!loading() && !error() && questions().length > 0" class="questions-wrapper">
+    <div *ngFor="let q of questions(); let i = index" class="question-card">
+      <div class="question-header">
+        <span class="number">Q{{ i + 1 }}</span>
+        <span class="type">{{ q.questionType }}</span>
+        <span class="mark">{{ q.mark }} marks</span>
+      </div>
+
+      <p class="question-text">{{ q.questionText }}</p>
+
+      <!-- MCQ / TrueFalse -->
+      <div *ngIf="q.options && q.options.length > 0" class="options">
+        <label
+          *ngFor="let opt of q.options"
+          class="option"
+          [class.selected]="answers()[q.questionId]?.selectedOptionIds?.includes(opt.optionId || '')"
+        >
+          <input
+            type="checkbox"
+            [checked]="answers()[q.questionId]?.selectedOptionIds?.includes(opt.optionId || '')"
+            (change)="toggleOption(q.questionId, opt.optionId || '')"
+          />
+          <span>{{ opt.optionText }}</span>
+        </label>
+      </div>
+
+      <!-- Text Answer -->
+      <div *ngIf="!q.options || q.options.length === 0" class="text-answer">
+        <textarea
+          rows="3"
+          placeholder="Your answer..."
+          [ngModel]="answers()[q.questionId]?.answerText || ''"
+          (ngModelChange)="updateTextAnswer(q.questionId, $event)"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <footer *ngIf="!loading() && !error() && questions().length > 0" class="exam-footer">
+    <button
+      type="button"
+      class="btn-submit"
+      (click)="submitExam()"
+      [disabled]="submitting()"
+    >
+      {{ submitting() ? 'Submitting...' : 'Submit Exam' }}
+    </button>
+  </footer>
+</div>

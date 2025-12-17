@@ -1,0 +1,255 @@
+<div class="dashboard-container">
+
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div>
+      <h2 class="dashboard-title">Super Admin Dashboard</h2>
+      <p class="dashboard-subtitle">Manage the entire LearnHub platform from here.</p>
+    </div>
+    <div class="date-badge">
+      <i class="bi bi-calendar-event"></i>
+      <span>{{ today | date:'mediumDate' }}</span>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    <div>
+      {{ errorMessage }}
+      <button class="btn btn-sm btn-outline-danger ms-3" (click)="loadDashboard()">Retry</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!loading" class="main-content">
+
+    <!-- Stats Cards Row -->
+    <div class="stats-row">
+      <!-- Users Card -->
+      <div class="stat-card stat-card-users">
+        <div class="stat-card-content">
+          <div class="stat-info">
+            <div class="stat-label">USERS</div>
+            <div class="stat-value">{{ totalUsers }}</div>
+            <div class="stat-trend" [class.positive]="usersTrend > 0" [class.negative]="usersTrend < 0">
+              <i class="bi" [class.bi-arrow-up]="usersTrend > 0" [class.bi-arrow-down]="usersTrend < 0"></i>
+              {{ usersTrend }}% vs last month
+            </div>
+          </div>
+          <div class="stat-icon stat-icon-users">
+            <i class="bi bi-people-fill"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Courses Card -->
+      <div class="stat-card stat-card-courses">
+        <div class="stat-card-content">
+          <div class="stat-info">
+            <div class="stat-label">COURSES</div>
+            <div class="stat-value">{{ totalCourses }}</div>
+            <div class="stat-trend" [class.positive]="coursesTrend > 0" [class.negative]="coursesTrend < 0">
+              <i class="bi" [class.bi-arrow-up]="coursesTrend > 0" [class.bi-arrow-down]="coursesTrend < 0"></i>
+              {{ coursesTrend }}% vs last month
+            </div>
+          </div>
+          <div class="stat-icon stat-icon-courses">
+            <i class="bi bi-book-half"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tickets Card -->
+      <div class="stat-card stat-card-tickets">
+        <div class="stat-card-content">
+          <div class="stat-info">
+            <div class="stat-label">TICKETS</div>
+            <div class="stat-value">{{ totalTickets }}</div>
+            <div class="stat-trend" [class.positive]="ticketsTrend > 0" [class.negative]="ticketsTrend < 0">
+              <i class="bi" [class.bi-arrow-up]="ticketsTrend > 0" [class.bi-arrow-down]="ticketsTrend < 0"></i>
+              {{ ticketsTrend }}% vs last month
+            </div>
+          </div>
+          <div class="stat-icon stat-icon-tickets">
+            <i class="bi bi-envelope-paper"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Instructors Card -->
+      <div class="stat-card stat-card-instructors">
+        <div class="stat-card-content">
+          <div class="stat-info">
+            <div class="stat-label">INSTRUCTORS</div>
+            <div class="stat-value">{{ totalInstructors }}</div>
+            <div class="stat-trend" [class.positive]="instructorsTrend > 0" [class.negative]="instructorsTrend < 0">
+              <i class="bi" [class.bi-arrow-up]="instructorsTrend > 0" [class.bi-arrow-down]="instructorsTrend < 0"></i>
+              {{ instructorsTrend }}% vs last month
+            </div>
+          </div>
+          <div class="stat-icon stat-icon-instructors">
+            <i class="bi bi-person-video3"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Breakdown & Quick Actions Row -->
+    <div class="middle-row">
+      <!-- User Breakdown -->
+      <div class="breakdown-card">
+        <div class="card-title">User Breakdown</div>
+        <div class="breakdown-content">
+          <!-- Donut Chart -->
+          <div class="donut-chart">
+            <div class="donut-ring" [style.background]="stats.chartGradient">
+              <div class="donut-hole">
+                <div class="donut-center-value">{{ stats.totalUsers }}</div>
+                <div class="donut-center-label">TOTAL USERS</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Legend -->
+          <div class="breakdown-legend">
+            <div class="legend-item">
+              <div class="legend-color legend-color-students"></div>
+              <div class="legend-info">
+                <div class="legend-title">Students</div>
+                <div class="legend-count">{{ stats.students }} users</div>
+              </div>
+              <div class="legend-percentage">{{ stats.studentPct }}%</div>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color legend-color-instructors"></div>
+              <div class="legend-info">
+                <div class="legend-title">Instructors</div>
+                <div class="legend-count">{{ stats.instructors }} users</div>
+              </div>
+              <div class="legend-percentage">{{ stats.instructorPct }}%</div>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color legend-color-admins"></div>
+              <div class="legend-info">
+                <div class="legend-title">Admins</div>
+                <div class="legend-count">{{ stats.admins }} users</div>
+              </div>
+              <div class="legend-percentage">{{ stats.adminPct }}%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions-card">
+        <div class="card-title">Quick Actions</div>
+        <div class="quick-actions-content">
+          <button class="action-btn action-btn-primary" (click)="openAddUserModal()">
+            <i class="bi bi-person-plus-fill"></i>
+            Add New User
+          </button>
+          <button class="action-btn action-btn-secondary" routerLink="/admin/reports">
+            <i class="bi bi-file-earmark-text"></i>
+            Create Report
+          </button>
+          <button class="action-btn action-btn-secondary" routerLink="/admin/settings">
+            <i class="bi bi-gear-fill"></i>
+            System Settings
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Users & Courses Row -->
+    <div class="bottom-row">
+      <!-- Recent Users -->
+      <div class="recent-card">
+        <div class="recent-header">
+          <div class="card-title">Recent Users</div>
+          <button class="view-all-btn" routerLink="/admin/users">View All</button>
+        </div>
+        <div class="recent-table">
+          <table>
+            <thead>
+              <tr>
+                <th>NAME</th>
+                <th>ROLE</th>
+                <th>JOINED</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of recentUsers">
+                <td>
+                  <div class="user-info">
+                    <div class="user-avatar">{{ user?.name?.charAt(0)?.toUpperCase() || 'U' }}</div>
+                    <div class="user-details">
+                      <div class="user-name">{{ user.name }}</div>
+                      <div class="user-email">{{ user.email }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="role-badge">{{ getRoleLabel(user.role) }}</span>
+                </td>
+                <td class="date-cell">{{ user.createdAt | date:'MMM d, yyyy' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Recent Courses -->
+      <div class="recent-card">
+        <div class="recent-header">
+          <div class="card-title">Recent Courses</div>
+          <button class="view-all-btn" routerLink="/admin/courses">View All</button>
+        </div>
+        <div class="recent-table">
+          <table>
+            <thead>
+              <tr>
+                <th>COURSE</th>
+                <th>INSTRUCTOR</th>
+                <th>STUDENTS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let course of recentCourses">
+                <td>
+                  <div class="course-info">
+                    <div class="course-icon">
+                      <i class="bi bi-journal-code"></i>
+                    </div>
+                    <div class="course-details">
+                      <div class="course-title">{{ course.title || course.name || 'Untitled Course' }}</div>
+                      <div class="course-category">{{ course.category || 'General' }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ course.instructorName }}</td>
+                <td class="students-cell">
+                  <span class="students-count">{{ course.studentsCount || course.students?.length || 0 }}</span>
+                  <i class="bi bi-people-fill"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Add User Modal -->
+  <app-add-user-modal [isOpen]="showAddUserModal" (close)="closeAddUserModal()" (userAdded)="onUserAdded($event)">
+  </app-add-user-modal>
+
+</div>

@@ -1,0 +1,142 @@
+<div class="manage-content-page">
+  <!-- Floating decorative elements -->
+  <div class="floating-element element-1">🎓</div>
+  <div class="floating-element element-2">📚</div>
+  <div class="floating-element element-3">⭐</div>
+  <div class="floating-element element-4">💡</div>
+  
+  <header class="page-header">
+    <div class="header-content">
+      <div class="header-title">
+        <h1>Manage Course Content</h1>
+        <div class="badges" *ngIf="course()">
+          <span class="badge" [class.published]="course()!.isPublished" [class.draft]="!course()!.isPublished">
+            {{ course()!.isPublished ? 'Live' : 'Draft' }}
+          </span>
+        </div>
+      </div>
+      <p *ngIf="course()">{{ course()!.title }}</p>
+    </div>
+
+    <div class="header-actions">
+      <button (click)="navigateToCoursesList()" class="btn-secondary">Cancel</button>
+      <button (click)="confirmDeleteCourse()" class="btn-delete" [disabled]="deleting()">🗑️ {{ deleting() ? 'Deleting...' : 'Delete Course' }}</button>
+      <button *ngIf="course()" (click)="togglePublishStatus()" [disabled]="publishing()"
+        [class.btn-publish]="!course()!.isPublished" [class.btn-unpublish]="course()!.isPublished">
+        {{ publishing() ? 'Processing...' : (course()!.isPublished ? 'Unpublish' : '🚀 Publish Course') }}
+      </button>
+    </div>
+  </header>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="loading-state">
+    <p>Loading lessons...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error() && !loading()" class="error-state">
+    <p>{{ error() }}</p>
+    <button (click)="loadLessons(courseId() || '')">Retry</button>
+  </div>
+
+  <!-- Lessons List -->
+  <div *ngIf="!loading() && !error()">
+    <div class="section-header">
+      <h2>Course Lessons</h2>
+      <button (click)="addLesson()" class="btn-primary">+ Add Lesson</button>
+    </div>
+
+    <div *ngIf="lessons().length === 0" class="empty-state">
+      <div class="empty-icon">📚</div>
+      <h3>No lessons yet</h3>
+      <p>Add your first lesson to get started</p>
+      <button (click)="addLesson()" class="btn-primary">Add Lesson</button>
+    </div>
+
+    <div *ngIf="lessons().length > 0" class="lessons-table">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Duration</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let lesson of lessons(); let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ lesson.title }}</td>
+            <td>{{ getContentTypeLabel(lesson.contentType) }}</td>
+            <td>{{ lesson.durationMinutes }} min</td>
+            <td class="actions">
+              <button (click)="viewLessonContent(lesson)" class="btn-view" title="View Content">👁️</button>
+              <button (click)="editLesson(lesson.lessonId)" class="btn-edit">Edit</button>
+              <button (click)="deleteLesson(lesson.lessonId)" [disabled]="deleting() === lesson.lessonId"
+                class="btn-delete">
+                {{ deleting() === lesson.lessonId ? 'Deleting...' : 'Delete' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- Course Reviews (from students who reviewed this course) -->
+  <div class="course-reviews-section" *ngIf="!loading() && !error()">
+    <div class="section-header">
+      <h2>Student Reviews for This Course</h2>
+    </div>
+
+    <div *ngIf="courseReviews().length === 0" class="empty-state">
+      <div class="empty-icon">💬</div>
+      <h3>No reviews yet</h3>
+      <p>Students who took this course can leave feedback here.</p>
+    </div>
+
+    <div *ngIf="courseReviews().length > 0" class="reviews-list">
+      <div *ngFor="let r of courseReviews()" class="review-card">
+        <div class="review-header">
+          <strong>{{ r.studentName || r.studentId || 'Student' }}</strong>
+          <span class="rating">{{ r.rating }} / 5</span>
+        </div>
+        <div class="review-body">
+          <p>{{ r.comment }}</p>
+        </div>
+        <div class="review-meta">
+          <small>{{ r.createdAt ? (r.createdAt | date:'mediumDate') : '' }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Delete Confirmation Modal -->
+  <div *ngIf="showDeleteModal()" class="modal-overlay">
+    <div class="modal-content">
+      <header class="modal-header">
+        <h2>Confirm Deletion</h2>
+        <button type="button" class="close-btn" (click)="closeDeleteModal()">×</button>
+      </header>
+      <div class="modal-body">
+        <div class="warning-icon">⚠️</div>
+        <h3>Are you sure?</h3>
+        <p>You are about to permanently delete this course and all its content. This action cannot be undone.</p>
+        <div class="course-info" *ngIf="course()">
+          <strong>{{ course()!.title }}</strong>
+          <div class="stats">
+            <span>{{ lessons().length }} lessons</span>
+            <span>{{ courseReviews().length }} reviews</span>
+          </div>
+        </div>
+      </div>
+      <footer class="modal-footer">
+        <button type="button" class="btn-secondary" (click)="closeDeleteModal()">Cancel</button>
+        <button type="button" class="btn-danger" (click)="deleteCourse()" [disabled]="deleting()">
+          {{ deleting() ? 'Deleting...' : 'Yes, Delete Course' }}
+        </button>
+      </footer>
+    </div>
+  </div>
+</div>

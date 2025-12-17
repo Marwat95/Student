@@ -1,0 +1,107 @@
+<div class="payments-page">
+  <header class="page-header">
+    <h1>💳 Payment History</h1>
+    <p class="subtitle">View all your course payments and transaction details.</p>
+  </header>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="state state-loading">
+    <div class="spinner"></div>
+    <p>Loading payments</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error() && !loading()" class="state state-error">
+    <p>{{ error() }}</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading() && !error() && payments().length === 0" class="state state-empty">
+    <div class="empty-icon">💳</div>
+    <h3>No payments found</h3>
+    <p>You haven't made any payments yet.</p>
+  </div>
+
+  <!-- Payments List -->
+  <div *ngIf="!loading() && !error() && payments().length > 0" class="payments-list">
+    <div *ngFor="let payment of payments()" class="payment-card">
+      <div class="payment-header">
+        <div class="payment-info-main">
+          <div class="payment-id">#{{ payment.paymentId.substring(0, 8) }}</div>
+          <div class="payment-date">
+            <span class="date-icon">📅</span>
+            {{ payment.createdAt | date : 'mediumDate' }}
+          </div>
+        </div>
+        <div class="payment-amount-badge">
+          <span class="currency-symbol">$</span>
+          <span class="amount">{{ payment.amount | number : '1.2-2' }}</span>
+        </div>
+      </div>
+
+      <div class="payment-body">
+        <div class="course-info" (click)="viewCourse(payment.courseId)">
+          <span class="course-icon">🏛️</span>
+          <div class="course-details">
+            <p class="course-label">Course</p>
+            <p class="course-name">{{ getCourseName(payment.courseId) }}</p>
+          </div>
+        </div>
+
+        <div class="payment-details">
+          <div class="detail-item">
+            <span class="detail-icon">💳</span>
+            <div class="detail-content">
+              <span class="label">Payment Method</span>
+              <span class="value">Credit Card</span>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-icon">🔒</span>
+            <div class="detail-content">
+              <span class="label">Transaction ID</span>
+              <span class="value">{{
+                payment.paymentIntentId || payment.paymentId.substring(0, 12)
+              }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="payment-footer">
+        <div [class]="'status-badge ' + getStatusClass(payment.status || 'Completed')">
+          <span class="status-icon">{{ getStatusIcon(payment.status || 'Completed') }}</span>
+          <span class="status-text">{{ payment.status || 'Completed' }}</span>
+        </div>
+        <button type="button" class="btn-view-course" (click)="viewCourse(payment.courseId)">
+          <span class="btn-icon">👁️</span>
+          View Course
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="totalPages() > 1 && !loading() && !error()" class="pagination">
+    <button
+      type="button"
+      class="page-btn"
+      [disabled]="pageNumber() === 1"
+      (click)="goToPage(pageNumber() - 1)"
+    >
+      Previous
+    </button>
+
+    <span class="page-info"> Page {{ pageNumber() }} of {{ totalPages() }} </span>
+
+    <button
+      type="button"
+      class="page-btn"
+      [disabled]="pageNumber() === totalPages()"
+      (click)="goToPage(pageNumber() + 1)"
+    >
+      Next
+    </button>
+  </div>
+</div>

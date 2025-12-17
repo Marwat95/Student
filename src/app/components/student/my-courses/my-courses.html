@@ -1,0 +1,167 @@
+<div class="my-courses-page">
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+  
+  <!-- Back Button -->
+  <div class="back-button-container">
+    <app-back-button></app-back-button>
+  </div>
+  
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <h1>📚 My Courses</h1>
+      <p class="subtitle">Track your enrolled courses and continue learning.</p>
+    </div>
+  </header>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="state state-loading">
+    <div class="spinner"></div>
+    <p>Loading your courses...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error() && !loading()" class="state state-error">
+    <div class="error-icon">❌</div>
+    <p><strong>Error:</strong> {{ error() }}</p>
+    <button type="button" class="btn btn-primary" (click)="loadEnrollments(1)">
+      <span class="btn-icon">🔄</span>
+      Retry
+    </button>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading() && !error() && enrollments().length === 0" class="state state-empty">
+    <div class="empty-icon">📚</div>
+    <h3>No Enrollments Yet</h3>
+    <p>Browse courses and start your learning journey today!</p>
+  </div>
+
+  <!-- Courses Grid -->
+  <div *ngIf="!loading() && !error() && enrollments().length > 0" class="courses-container">
+    <!-- Grid Layout -->
+    <div class="courses-grid">
+      <div *ngFor="let enrollment of enrollments(); trackBy: trackByEnrollmentId" 
+           class="course-card" 
+           [attr.data-enrollment-id]="enrollment.enrollmentId">
+        
+        <!-- Course Thumbnail -->
+        <div class="course-thumbnail-wrapper">
+          <img 
+            *ngIf="getCourseThumbnail(enrollment)" 
+            [src]="getCourseThumbnail(enrollment)" 
+            [alt]="getCourseTitleDisplay(enrollment)"
+            class="course-thumbnail"
+            (error)="onImageError($event)">
+          <div *ngIf="!getCourseThumbnail(enrollment)" class="course-thumbnail-placeholder">
+            🎓
+          </div>
+          <span class="status-badge" [ngClass]="'status-' + (enrollment.isCompleted ? 'completed' : 'active')">
+            {{ getStatusDisplay(enrollment) }}
+          </span>
+        </div>
+
+        <!-- Card Content -->
+        <div class="card-content">
+          <!-- Course Title -->
+          <div class="course-header">
+            <h2 class="course-title" [title]="getCourseTitleDisplay(enrollment)">
+              {{ getCourseTitleDisplay(enrollment) }}
+            </h2>
+          </div>
+
+          <!-- Enrollment Date -->
+          <p class="enrollment-date">
+            <span class="date-icon">📅</span>
+            Enrolled {{ enrollment.enrollmentDate | date : 'mediumDate' }}
+          </p>
+
+          <!-- Progress Section -->
+          <div class="progress-section">
+            <div class="progress-header">
+              <span class="progress-label">Progress</span>
+              <span class="progress-percentage">
+                {{ getProgressDisplay(enrollment) | number : '1.0-0' }}%
+              </span>
+            </div>
+            <div class="progress-bar-wrapper">
+              <div class="progress-bar">
+                <div class="progress-fill" 
+                     [style.width.%]="getProgressDisplay(enrollment)"
+                     [ngClass]="'progress-' + (enrollment.isCompleted ? 'completed' : 'active')">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Completion Info -->
+          <div *ngIf="enrollment.isCompleted && enrollment.completedAt" class="completion-info">
+            <span class="completion-icon">✅</span>
+            <span>Completed on {{ enrollment.completedAt | date : 'mediumDate' }}</span>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="card-actions">
+            <button 
+              type="button" 
+              class="btn btn-primary" 
+              (click)="navigateToCourse(enrollment.courseId)"
+              [disabled]="loading() || !enrollment.courseId">
+              <span class="btn-icon">▶️</span>
+              {{ !enrollment.courseId ? 'Course Unavailable' : 'Continue Course' }}
+            </button>
+
+            <button 
+              type="button" 
+              class="btn btn-secondary" 
+              (click)="navigateToProgress(enrollment.enrollmentId)"
+              [disabled]="loading()">
+              <span class="btn-icon">📊</span>
+              View Progress
+            </button>
+
+            <button 
+              *ngIf="enrollment.isCompleted" 
+              type="button" 
+              class="btn btn-success" 
+              (click)="navigateToCertificate(enrollment.enrollmentId)"
+              [disabled]="loading()">
+              <span class="btn-icon">🎓</span>
+              Certificate
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="totalPages() > 1" class="pagination-section">
+      <nav class="pagination">
+        <button 
+          type="button" 
+          class="page-btn prev-btn" 
+          [disabled]="pageNumber() === 1 || loading()" 
+          (click)="goToPage(pageNumber() - 1)">
+          <span class="btn-icon">⬅️</span>
+          Previous
+        </button>
+
+        <span class="page-info">
+          Page <strong>{{ pageNumber() }}</strong> of <strong>{{ totalPages() }}</strong>
+          <span class="page-stats">({{ enrollments().length }} courses)</span>
+        </span>
+
+        <button 
+          type="button" 
+          class="page-btn next-btn" 
+          [disabled]="pageNumber() === totalPages() || loading()" 
+          (click)="goToPage(pageNumber() + 1)">
+          Next
+          <span class="btn-icon">➡️</span>
+        </button>
+      </nav>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,366 @@
+// Payments Page Styles with Modern Glassmorphism Design
+
+$primary-gradient: linear-gradient(135deg, #10b981 0%, #047857 100%);
+$card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+$text-dark: #2d3748;
+$text-light: #718096;
+$bg-light: rgba(247, 250, 252, 0.8);
+
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #10b98115 0%, #06b6d415 50%, #8b5cf615 100%);
+  padding: 2rem;
+}
+
+.payments-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease;
+
+  .page-header {
+    margin-bottom: 3rem;
+    text-align: center;
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin: 0 0 0.5rem;
+      background: $primary-gradient;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.3;
+      /* Prevent clipping */
+      padding-bottom: 0.2rem;
+      /* Prevent clipping */
+    }
+
+    .subtitle {
+      color: $text-light;
+      font-size: 1.1rem;
+      margin: 0;
+    }
+  }
+
+  .state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 24px;
+    box-shadow: $card-shadow;
+
+    &.state-error {
+      background: linear-gradient(135deg, #fee 0%, #fdd 100%);
+      border-left: 4px solid #e53e3e;
+
+      p {
+        color: #c53030;
+      }
+    }
+  }
+
+  .payments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .payment-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: $card-shadow;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid transparent;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: $hover-shadow;
+        border-color: rgba(16, 185, 129, 0.2);
+      }
+
+      .payment-header {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(6, 182, 212, 0.05));
+        padding: 1.5rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+
+        .payment-info-main {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+
+          .payment-id {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: $text-dark;
+            font-family: monospace;
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+          }
+
+          .payment-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: $text-light;
+            font-size: 0.95rem;
+
+            .date-icon {
+              font-size: 1rem;
+            }
+          }
+        }
+
+        .payment-amount-badge {
+          display: flex;
+          align-items: baseline;
+          gap: 0.25rem;
+          background: $primary-gradient;
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border-radius: 50px;
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+
+          .currency-symbol {
+            font-size: 1.2rem;
+            font-weight: 600;
+          }
+
+          .amount {
+            font-size: 1.5rem;
+            font-weight: 800;
+          }
+        }
+      }
+
+      .payment-body {
+        padding: 2rem;
+
+        .course-info {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1.25rem;
+          background: linear-gradient(135deg, rgba(28, 111, 43, 0.03), rgba(6, 182, 212, 0.03));
+          border-radius: 12px;
+          margin-bottom: 1.5rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border: 1px solid transparent;
+
+          &:hover {
+            background: linear-gradient(135deg, rgba(28, 111, 43, 0.08), rgba(6, 182, 212, 0.08));
+            border-color: rgba(28, 111, 43, 0.2);
+            transform: translateX(5px);
+          }
+
+          .course-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+          }
+
+          .course-details {
+            flex: 1;
+
+            .course-label {
+              font-size: 0.8rem;
+              color: $text-light;
+              margin: 0 0 0.25rem 0;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+              font-weight: 600;
+            }
+
+            .course-name {
+              font-size: 1.1rem;
+              font-weight: 700;
+              color: $text-dark;
+              margin: 0;
+              line-height: 1.4;
+            }
+          }
+        }
+
+        .payment-details {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1.25rem;
+
+          .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: $bg-light;
+            border-radius: 10px;
+
+            .detail-icon {
+              font-size: 1.5rem;
+              flex-shrink: 0;
+            }
+
+            .detail-content {
+              display: flex;
+              flex-direction: column;
+              gap: 0.25rem;
+
+              .label {
+                font-size: 0.75rem;
+                color: $text-light;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                font-weight: 600;
+              }
+
+              .value {
+                font-size: 0.95rem;
+                color: $text-dark;
+                font-weight: 600;
+                font-family: monospace;
+              }
+            }
+          }
+        }
+      }
+
+      .payment-footer {
+        padding: 1.25rem 2rem;
+        background: linear-gradient(135deg, rgba(247, 250, 252, 0.5), rgba(241, 245, 249, 0.5));
+        border-top: 1px solid rgba(226, 232, 240, 0.8);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .status-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.6rem 1.2rem;
+          border-radius: 50px;
+          font-size: 0.9rem;
+          font-weight: 700;
+
+          .status-icon {
+            font-size: 1rem;
+          }
+
+          &.status-success {
+            background: linear-gradient(135deg, #10b981, #047857);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+          }
+
+          &.status-pending {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+          }
+
+          &.status-failed {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+          }
+        }
+
+        .btn-view-course {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.7rem 1.5rem;
+          background: white;
+          border: 2px solid #e2e8f0;
+          color: $text-dark;
+          border-radius: 50px;
+          font-weight: 600;
+          font-size: 0.9rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: $primary-gradient;
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(28, 111, 43, 0.3);
+          }
+
+          .btn-icon {
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: $card-shadow;
+
+    .page-btn {
+      padding: 0.75rem 2rem;
+      border: 2px solid #e2e8f0;
+      background: white;
+      color: $text-dark;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover:not(:disabled) {
+        border-color: #10b981;
+        background: #ecfdf5;
+        color: #10b981;
+        transform: translateY(-2px);
+      }
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+    }
+
+    .page-info {
+      color: $text-light;
+      font-weight: 600;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  :host {
+    padding: 1rem;
+  }
+
+  .payments-page .page-header h1 {
+    font-size: 2rem;
+  }
+
+  .payments-page .payments-list .payment-card {
+    padding: 1.5rem;
+  }
+}

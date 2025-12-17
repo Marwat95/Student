@@ -1,0 +1,137 @@
+<div class="my-groups-page">
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <button type="button" class="back-btn" (click)="navigateBack()">
+        <span class="btn-icon">⬅️</span>
+        Back
+      </button>
+      <h1>👥 My Groups</h1>
+      <p class="subtitle">View and manage your group memberships.</p>
+    </div>
+  </header>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="state state-loading">
+    <div class="spinner"></div>
+    <p>Loading your groups...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error() && !loading()" class="state state-error">
+    <div class="error-icon">❌</div>
+    <p><strong>Error:</strong> {{ error() }}</p>
+    <button type="button" class="btn btn-primary" (click)="loadGroups(1)">
+      <span class="btn-icon">🔄</span>
+      Retry
+    </button>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading() && !error() && groups().length === 0" class="state state-empty">
+    <div class="empty-icon">👥</div>
+    <h3>No Groups Yet</h3>
+    <p>You haven't joined any groups yet.</p>
+    <p class="info-message">💡 Ask your instructor for a group invitation link to get started!</p>
+  </div>
+
+  <!-- Groups Grid -->
+  <div *ngIf="!loading() && !error() && groups().length > 0" class="groups-container">
+    <!-- Grid Layout -->
+    <div class="groups-grid">
+      <div
+        *ngFor="let group of groups(); trackBy: trackByGroupId"
+        class="group-card"
+        (click)="viewGroupDetails(group.groupId)"
+        [attr.data-group-id]="group.groupId"
+      >
+        <!-- Group Icon -->
+        <div class="group-icon-wrapper">
+          <div class="group-icon">
+            <span class="icon-emoji">👥</span>
+          </div>
+        </div>
+
+        <!-- Card Content -->
+        <div class="card-content">
+          <!-- Group Name -->
+          <div class="group-header">
+            <h2 class="group-name" [title]="group.name">
+              {{ group.name }}
+            </h2>
+          </div>
+
+          <!-- Group Description -->
+          <p class="group-description" [title]="group.description">
+            {{ group.description || 'No description available' }}
+          </p>
+
+          <!-- Group Stats -->
+          <div class="group-stats">
+            <div class="stat-item">
+              <span class="stat-icon">👨‍🎓</span>
+              <span class="stat-label">{{ group.studentsCount || 0 }} Students</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-icon">📚</span>
+              <span class="stat-label">{{ group.coursesCount || 0 }} Courses</span>
+            </div>
+          </div>
+
+          <!-- Created Date -->
+          <p class="created-date">
+            <span class="date-icon">📅</span>
+            Created {{ group.createdAt | date : 'mediumDate' }}
+          </p>
+
+          <!-- Action Button -->
+          <div class="card-actions">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="viewGroupDetails(group.groupId); $event.stopPropagation()"
+              [disabled]="loading()"
+            >
+              <span class="btn-icon">👁️</span>
+              View Group
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="totalPages() > 1" class="pagination-section">
+      <nav class="pagination">
+        <button
+          type="button"
+          class="page-btn prev-btn"
+          [disabled]="pageNumber() === 1 || loading()"
+          (click)="goToPage(pageNumber() - 1)"
+        >
+          <span class="btn-icon">⬅️</span>
+          Previous
+        </button>
+
+        <span class="page-info">
+          Page <strong>{{ pageNumber() }}</strong> of <strong>{{ totalPages() }}</strong>
+          <span class="page-stats">({{ groups().length }} groups)</span>
+        </span>
+
+        <button
+          type="button"
+          class="page-btn next-btn"
+          [disabled]="pageNumber() === totalPages() || loading()"
+          (click)="goToPage(pageNumber() + 1)"
+        >
+          Next
+          <span class="btn-icon">➡️</span>
+        </button>
+      </nav>
+    </div>
+  </div>
+</div>

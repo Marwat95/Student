@@ -1,0 +1,116 @@
+<div class="d-flex admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.collapsed]="isCollapsed">
+    <div class="sidebar-header">
+      <div class="logo-area">
+        <i class="bi bi-mortarboard-fill logo-icon"></i>
+        <span class="logo-text">LearnHub</span>
+      </div>
+      <button class="btn btn-sm btn-icon toggle-btn" (click)="toggleSidebar()">
+        <i class="bi" [class.bi-chevron-left]="!isCollapsed" [class.bi-chevron-right]="isCollapsed"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
+            <i class="bi bi-grid-fill"></i>
+            <span class="link-text">Dashboard</span>
+          </a>
+        </li>
+
+        <li class="nav-header">Management</li>
+
+        <li class="nav-item">
+          <a routerLink="/admin/users" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-people-fill"></i>
+            <span class="link-text">Users</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/admin/instructors" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-person-video3"></i>
+            <span class="link-text">Instructors</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/admin/courses" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-journal-bookmark-fill"></i>
+            <span class="link-text">Courses</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/admin/support" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-headset"></i>
+            <span class="link-text">Support Tickets</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/admin/payments" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-credit-card-fill"></i>
+            <span class="link-text">Payments</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/admin/subscriptions" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-box-seam"></i>
+            <span class="link-text">Subscriptions</span>
+          </a>
+        </li>
+        <!-- <li class="nav-item">
+          <a routerLink="/admin/promo-codes" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-tag-fill"></i>
+            <span class="link-text">Promo Codes</span>
+          </a>
+        </li> -->
+        <li class="nav-item">
+          <a routerLink="/admin/promo-codes" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-ticket-detailed"></i>
+            <span class="link-text">Promo Codes</span>
+          </a>
+        </li>
+
+        <li class="nav-header">Insights</li>
+
+        <li class="nav-item">
+          <a routerLink="/admin/reports" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-file-earmark-bar-graph-fill"></i>
+            <span class="link-text">Reports</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/admin/analytics" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-graph-up-arrow"></i>
+            <span class="link-text">Analytics</span>
+          </a>
+        </li>
+
+        <li class="mt-auto nav-item footer-link">
+          <a (click)="openProfile()" class="nav-link text-info" style="cursor: pointer;">
+            <i class="bi bi-person-circle"></i>
+            <span class="link-text">Profile</span>
+          </a>
+        </li>
+        <li class="nav-item footer-link">
+          <a (click)="logout()" class="nav-link text-danger" style="cursor: pointer;">
+            <i class="bi bi-box-arrow-right"></i>
+            <span class="link-text">Sign Out</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Admin Profile Modal -->
+  <app-admin-profile-modal [isOpen]="showProfileModal" (close)="closeProfile()"
+    (profileUpdated)="onProfileUpdated($event)">
+  </app-admin-profile-modal>
+
+</div>

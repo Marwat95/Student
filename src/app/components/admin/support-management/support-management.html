@@ -1,0 +1,187 @@
+<div class="support-management">
+  <!-- Floating decorative elements -->
+  <div class="floating-element element-1">🎟️</div>
+  <div class="floating-element element-2">⭐</div>
+  <div class="floating-element element-3">📈</div>
+  <div class="floating-element element-4">🎯</div>
+  
+  <div class="px-4 py-4">
+    <!-- Header Section -->
+    <div class="header">
+      <h2>Support Tickets Management</h2>
+    </div>
+
+    <!-- Search and Filters Section -->
+    <div class="search-filters">
+      <div class="d-flex gap-3 align-items-center flex-wrap">
+        <!-- Search Bar -->
+        <div class="position-relative flex-grow-1">
+          <input type="text" class="form-control ps-4 rounded-pill border-0 shadow-sm bg-white"
+              placeholder="Search tickets..." [(ngModel)]="searchTerm" (ngModelChange)="filterTickets()"
+              name="searchTerm">
+          <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+        </div>
+
+        <!-- Status Filter -->
+        <select class="form-select rounded-pill shadow-sm" [(ngModel)]="statusFilter"
+            (ngModelChange)="filterTickets()" name="statusFilter">
+            <option value="">All Status</option>
+            <option value="open">Open</option>
+            <option value="assigned">Assigned</option>
+            <option value="resolved">Resolved</option>
+            <option value="closed">Closed</option>
+        </select>
+      </div>
+    </div>
+
+    <div *ngIf="loading()" class="text-center mt-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="!loading() && error()" class="alert alert-danger mt-4" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>{{ error() }}
+    </div>
+
+    <!-- Tickets Section -->
+    <div class="tickets-section">
+      <div class="section-header">
+        <h3>Support Tickets</h3>
+        <div class="count">Total: {{ totalCount() }}</div>
+      </div>
+
+      <!-- Tickets Grid -->
+      <div *ngIf="!loading() && !error()" class="tickets-grid">
+        <div class="row g-4">
+          <!-- Ticket Card -->
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let ticket of filteredTickets()">
+            <div class="ticket-card card h-100">
+              <div class="card-body">
+                <!-- Ticket Icon & Status -->
+                <div class="ticket-icon-wrapper mb-3 text-center">
+                  <div class="ticket-icon" [class]="getIconClass(ticket.status)">
+                    <i class="bi bi-headset"></i>
+                  </div>
+                  <!-- Status Badge -->
+                  <span class="status-badge badge rounded-pill position-absolute"
+                      [class]="getStatusBadgeClass(ticket.status)">
+                      {{ticket.status}}
+                  </span>
+                </div>
+
+                <!-- Ticket Info -->
+                <div class="ticket-info">
+                  <h5 class="card-title mb-2">{{ticket.subject}}</h5>
+
+                  <!-- Show User name only if ticket is assigned -->
+                  <p class="text-muted small mb-1" *ngIf="isTicketAssigned(ticket)">
+                    <i class="bi bi-person me-1"></i>User: {{$any(ticket).userName || ticket.userId}}
+                  </p>
+
+                  <!-- Show Waiting if ticket is not assigned -->
+                  <p class="text-muted small mb-1" *ngIf="!isTicketAssigned(ticket)">
+                    <i class="bi bi-clock-history me-1"></i>Status: Waiting
+                  </p>
+
+                  <p class="text-muted small mb-2" *ngIf="isTicketAssigned(ticket)">
+                    <i class="bi bi-person-check me-1"></i>Assigned: {{ticket.assignedToName ||
+                    'Loading...'}}
+                  </p>
+                  <p class="text-muted small mb-3">
+                    <i class="bi bi-calendar me-1"></i>{{formatDate(ticket.createdAt)}}
+                  </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons d-flex gap-2 justify-content-center">
+                  <button class="btn btn-sm btn-outline-primary flex-fill"
+                      (click)="openAssignModal(ticket)" title="Manage Ticket">
+                      <i class="bi bi-gear me-1"></i>Manage
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger flex-fill"
+                      (click)="deleteTicket(ticket.ticketId)" title="Delete Ticket">
+                      <i class="bi bi-trash me-1"></i>Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- No Tickets Found -->
+          <div class="col-12" *ngIf="!loading() && !error() && filteredTickets().length === 0">
+            <div class="empty-state">
+              <i class="bi bi-inbox"></i>
+              <h5>No tickets found</h5>
+              <p>Try adjusting your filters</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manage Ticket Modal -->
+  <div class="modal fade" [class.show]="showAssignModal()" [style.display]="showAssignModal() ? 'block' : 'none'"
+      tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">
+                      <i class="bi bi-gear me-2"></i>Manage Ticket
+                  </h5>
+                  <button type="button" class="btn-close btn-close-white" (click)="closeAssignModal()"></button>
+              </div>
+              <div class="modal-body">
+                  <!-- Ticket Info -->
+                  <div class="mb-4 p-3 bg-light rounded">
+                      <p class="mb-2"><strong>Subject:</strong> {{selectedTicket()?.subject}}</p>
+                      <p class="mb-0 text-muted small">{{selectedTicket()?.description}}</p>
+                  </div>
+
+                  <!-- Assign to Admin -->
+                  <div class="form-group mb-4">
+                      <label class="form-label">
+                          <i class="bi bi-person-plus me-2 text-primary"></i>Assign to Admin:
+                      </label>
+                      <input type="text" class="form-control" [value]="currentUserEmail" disabled readonly>
+                      <small class="text-muted">Automatically assigned to you</small>
+                  </div>
+
+                  <!-- Change Status -->
+                  <div class="form-group mb-4">
+                      <label class="form-label">
+                          <i class="bi bi-arrow-repeat me-2 text-warning"></i>Change Status:
+                      </label>
+                      <select [(ngModel)]="selectedStatus" class="form-select" name="statusSelect">
+                          <option value="open">Open</option>
+                          <option value="assigned">Assigned</option>
+                          <option value="resolved">Resolved</option>
+                          <option value="closed">Closed</option>
+                      </select>
+                  </div>
+
+                  <!-- Reply Message -->
+                  <div class="form-group mb-3">
+                      <label class="form-label">
+                          <i class="bi bi-reply me-2 text-success"></i>Reply to Ticket (Optional):
+                      </label>
+                      <textarea [(ngModel)]="replyMessage" class="form-control" rows="4" name="replyMessage"
+                          placeholder="Type your reply here..."></textarea>
+                      <small class="text-muted">This reply will be sent to the user</small>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-light" (click)="closeAssignModal()">
+                      <i class="bi bi-x-circle me-2"></i>Cancel
+                  </button>
+                  <button type="button" class="btn btn-primary px-4" (click)="assignTicket()">
+                      <i class="bi bi-check-circle me-2"></i>Save All Changes
+                  </button>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="modal-backdrop fade show" *ngIf="showAssignModal()"></div>
+</div>

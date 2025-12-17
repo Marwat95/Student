@@ -1,0 +1,39 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="onClose()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>Change Profile Photo</h2>
+            <button mat-icon-button (click)="onClose()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+
+        <div class="modal-content">
+            <div class="photo-preview-area">
+                <div class="avatar-preview">
+                    <img [src]="previewUrl || currentPhotoUrl || 'assets/images/default-profile.png'"
+                        alt="Profile Preview">
+                </div>
+
+                <div class="upload-controls">
+                    <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden>
+                    <button mat-stroked-button color="primary" (click)="fileInput.click()">
+                        <mat-icon>upload</mat-icon> Select Image
+                    </button>
+                    <span *ngIf="selectedFile" class="file-name">{{ selectedFile.name }}</span>
+                </div>
+            </div>
+
+            <div *ngIf="error()" class="error-message">
+                <mat-icon>error</mat-icon> {{ error() }}
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button mat-button (click)="onClose()" [disabled]="uploading()">Cancel</button>
+            <button mat-raised-button color="primary" (click)="savePhoto()" [disabled]="!selectedFile || uploading()">
+                <mat-progress-spinner *ngIf="uploading()" diameter="20" mode="indeterminate"></mat-progress-spinner>
+                <span *ngIf="!uploading()">Save Photo</span>
+            </button>
+        </div>
+    </div>
+</div>

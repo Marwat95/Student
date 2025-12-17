@@ -1,0 +1,120 @@
+<div class="browse-courses-page">
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+    <header class="page-header">
+        <button class="btn-back-dashboard" (click)="goToDashboard()">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Dashboard</span>
+        </button>
+        
+        <div class="header-content">
+            <h1 class="page-title">📚 Browse Courses</h1>
+            <p class="page-subtitle">Discover and enroll in courses to start your learning journey</p>
+        </div>
+
+        <!-- Search Box -->
+        <div class="search-container">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search courses..." (input)="onSearch($event)" class="search-input" />
+            </div>
+        </div>
+    </header>
+
+    <!-- Loading State -->
+    <div *ngIf="loading()" class="loading-state">
+        <div class="spinner"></div>
+        <p>⏳ Loading courses</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error() && !loading()" class="error-state">
+        <p>⚠️ {{ error() }}</p>
+        <button class="btn-primary" (click)="loadCourses()">Retry</button>
+    </div>
+
+    <!-- Courses Grid -->
+    <div *ngIf="!loading() && !error()">
+        <!-- Results Summary -->
+        <div class="results-summary">
+            <p>Found <strong>{{ totalCourses() }}</strong> courses</p>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="courses().length === 0" class="empty-state">
+            <div class="empty-icon">📚</div>
+            <h3>No courses found</h3>
+            <p>Try adjusting your search or check back later for new courses!</p>
+        </div>
+
+        <!-- Courses Grid -->
+        <div *ngIf="courses().length > 0" class="courses-grid">
+            <div *ngFor="let course of courses()" class="course-card">
+                <div class="course-header">
+                    <div class="course-thumbnail">
+                        <img *ngIf="course.thumbnailUrl" [src]="course.thumbnailUrl" [alt]="course.title" />
+                        <div *ngIf="!course.thumbnailUrl" class="thumbnail-placeholder">
+                            <span>📖</span>
+                        </div>
+                    </div>
+
+                    <div class="course-badges">
+                        <span *ngIf="course.popular" class="badge badge-popular">⭐ Popular</span>
+                        <span class="badge badge-price">{{ formatPrice(course.price) }}</span>
+                    </div>
+                </div>
+
+                <div class="course-content">
+                    <h3 class="course-title">{{ course.title }}</h3>
+                    <p class="course-description">{{ course.description }}</p>
+
+                    <div class="course-meta">
+                        <span class="meta-item">
+                            <span class="meta-icon">👨‍🏫</span>
+                            <span>{{ course.instructorName || 'Instructor' }}</span>
+                        </span>
+                        <span class="meta-item" *ngIf="course.enrollmentCount !== undefined">
+                            <span class="meta-icon">👥</span>
+                            <span>{{ course.enrollmentCount }} students</span>
+                        </span>
+                        <span class="meta-item" *ngIf="course.averageRating">
+                            <span class="meta-icon">⭐</span>
+                            <span>{{ course.averageRating | number:'1.1-1' }}</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="course-actions">
+                    <button class="btn-secondary" (click)="viewCourseDetails(course.courseId)">
+                        <span class="btn-icon">👁️</span>
+                        <span>Details</span>
+                    </button>
+                    <button class="btn-primary" (click)="enrollInCourse(course.courseId)"
+                        [disabled]="enrollingCourseId() === course.courseId">
+                        <span class="btn-icon">{{ enrollingCourseId() === course.courseId ? '⏳' : '✓' }}</span>
+                        <span>{{ enrollingCourseId() === course.courseId ? 'Enrolling...' : 'Enroll Now' }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div *ngIf="totalPages() > 1" class="pagination">
+            <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage() === 1">
+                ← Previous
+            </button>
+
+            <div class="pagination-pages">
+                <button *ngFor="let page of paginationPages" class="pagination-page"
+                    [class.active]="page === currentPage()" (click)="goToPage(page)">
+                    {{ page }}
+                </button>
+            </div>
+
+            <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage() === totalPages()">
+                Next →
+            </button>
+        </div>
+    </div>
+</div>

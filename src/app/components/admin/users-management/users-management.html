@@ -1,0 +1,109 @@
+<div class="container-fluid p-0">
+    <div class="px-4 py-4">
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <h2 class="fw-bold m-0">User Management</h2>
+
+            <div class="d-flex gap-3 align-items-center flex-grow-1 justify-content-end">
+                <!-- Search Bar -->
+                <div class="position-relative" style="max-width: 300px; width: 100%;">
+                    <input type="text" class="form-control ps-4 rounded-pill border-0 shadow-sm bg-white"
+                        placeholder="Search users..." [(ngModel)]="searchTerm">
+                    <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                </div>
+
+                <!-- Add User Button -->
+                <button class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center"
+                    (click)="openAddUserModal()">
+                    <i class="bi bi-person-plus-fill me-2"></i>
+                    Add User
+                </button>
+            </div>
+        </div>
+
+        <div *ngIf="loading" class="text-center mt-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Users Grid -->
+        <div *ngIf="!loading" class="users-grid">
+            <div class="row g-4">
+                <!-- User Card -->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let user of filteredUsers">
+                    <div class="user-card card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <!-- User Avatar -->
+                            <div class="user-avatar-wrapper mb-3">
+                                <div class="user-avatar" *ngIf="!user.avatar">
+                                    {{user.name?.charAt(0) || 'U'}}
+                                </div>
+                                <img *ngIf="user.avatar" [src]="user.avatar" alt="{{user.name}}"
+                                    class="user-avatar-img">
+                                <!-- Role Badge -->
+                                <span class="role-badge badge rounded-pill position-absolute" [ngClass]="{
+                                'bg-primary': user.role === 0,
+                                'bg-info': user.role === 1, 
+                                'bg-secondary': user.role === 2
+                              }">
+                                    {{
+                                    user.role === 0 ? 'Admin' :
+                                    (user.role === 1 ? 'Instructor' : 'Student')
+                                    }}
+                                </span>
+                            </div>
+
+                            <!-- User Info -->
+                            <div class="user-info">
+                                <h5 class="card-title mb-1 fw-bold">{{user.name}}</h5>
+                                <p class="text-muted small mb-1" *ngIf="user.username">@{{user.username}}</p>
+                                <p class="text-muted small mb-2">
+                                    <i class="bi bi-envelope me-1"></i>{{user.email}}
+                                </p>
+                                <p class="text-muted small mb-3">
+                                    <i class="bi bi-calendar me-1"></i>Joined {{user.createdAt | date:'mediumDate'}}
+                                </p>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="action-buttons d-flex gap-2 justify-content-center">
+                                <button class="btn btn-sm btn-outline-primary flex-fill" (click)="onEdit(user.id)"
+                                    [disabled]="!user.id" title="Edit User">
+                                    <i class="bi bi-pencil me-1"></i>Edit
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger flex-fill" (click)="onDelete(user.id)"
+                                    [disabled]="!user.id" title="Delete User">
+                                    <i class="bi bi-trash me-1"></i>Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- No Users Found -->
+                <div class="col-12" *ngIf="filteredUsers.length === 0">
+                    <div class="text-center py-5">
+                        <i class="bi bi-search display-1 text-secondary opacity-25 mb-3"></i>
+                        <h5 class="text-muted">No users match your search</h5>
+                        <p class="text-muted small">Try adjusting your search criteria</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit User Modal -->
+        <app-edit-user-modal [isOpen]="showEditModal" [userId]="editingUserId" (close)="onEditModalClose()"
+            (userUpdated)="onUserUpdated()">
+        </app-edit-user-modal>
+
+        <!-- Add User Modal -->
+        <app-add-user-modal [isOpen]="showAddUserModal" (close)="closeAddUserModal()" (userAdded)="onUserAdded($event)">
+        </app-add-user-modal>
+
+        <!-- Confirm Dialog -->
+        <app-confirm-modal [isOpen]="showModal" [title]="modalTitle" [message]="modalMessage"
+            (confirm)="confirmDelete()" (cancel)="cancelDelete()">
+        </app-confirm-modal>
+    </div>
+</div>

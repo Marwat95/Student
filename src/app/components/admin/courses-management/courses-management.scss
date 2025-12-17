@@ -1,0 +1,117 @@
+// Basic styles can be empty or shared, just ensuring file exists
+.icon-square {
+  font-size: 1.1rem;
+}
+
+// Courses Cards Grid Styles
+.courses-grid {
+  margin-top: 1rem;
+}
+
+.course-card {
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+  }
+
+  .card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+}
+
+.course-icon-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.course-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  margin: 0 auto;
+}
+
+.status-badge {
+  font-size: 0.75rem;
+  padding: 0.35em 0.65em;
+  width: fit-content;
+  max-width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.course-card {
+  .card-title {
+    font-size: 1rem;
+    color: #2d3748;
+    min-height: 2.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .text-muted {
+    font-size: 0.85rem;
+
+    i {
+      font-size: 0.8rem;
+    }
+  }
+
+  .text-success {
+    font-size: 1.2rem;
+  }
+
+  .course-info {
+    flex: 1;
+    min-height: 150px;
+  }
+
+  .action-buttons {
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+
+  .btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-weight: 500;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .course-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+
+  .course-card .card-body {
+    padding: 1rem;
+  }
+}

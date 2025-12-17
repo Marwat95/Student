@@ -1,0 +1,173 @@
+.payments-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .header-section {
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+.revenue-overview {
+  margin-bottom: 2.5rem;
+
+  .revenue-card {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 10px 20px rgba(13, 110, 253, 0.2);
+    max-width: 400px;
+
+    .card-body {
+      display: flex;
+      align-items: center;
+      padding: 2rem;
+      gap: 1.5rem;
+    }
+
+    .icon-wrapper {
+      background: rgba(255, 255, 255, 0.2);
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+    }
+
+    .content {
+      h3 {
+        font-size: 0.9rem;
+        font-weight: 500;
+        opacity: 0.9;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .amount {
+        font-size: 2.5rem;
+        font-weight: 700;
+        line-height: 1;
+
+        &.loading {
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+}
+
+.courses-list-section {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  border: 1px solid #eee;
+
+  .section-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #eee;
+    background: #f8f9fa;
+
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0;
+      color: #444;
+    }
+  }
+}
+
+.table-container {
+  .table {
+    margin: 0;
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+      th {
+        padding: 1rem 2rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #6c757d;
+        background: white;
+        border-bottom: 2px solid #eee;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    tbody {
+      td {
+        padding: 1.25rem 2rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #f0f0f0;
+        color: #444;
+        font-size: 0.95rem;
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      tr:hover {
+        background-color: #fcfcfc;
+      }
+    }
+  }
+}
+
+.course-info {
+  .course-title {
+    font-weight: 600;
+    color: #2c3e50;
+  }
+}
+
+.instructor-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+
+  i {
+    color: #adb5bd;
+  }
+}
+
+.sales-badge {
+  background: #e7f1ff;
+  color: #0d6efd;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.revenue-amount {
+  font-weight: 700;
+  color: #198754;
+  font-size: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-muted {
+  color: #6c757d;
+}

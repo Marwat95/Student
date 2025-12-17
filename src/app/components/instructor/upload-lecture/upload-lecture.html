@@ -1,0 +1,148 @@
+<div class="upload-lecture-page">
+  <!-- Floating decorative elements -->
+  <div class="floating-element element-1">🎓</div>
+  <div class="floating-element element-2">📚</div>
+  <div class="floating-element element-3">⭐</div>
+  <div class="floating-element element-4">💡</div>
+  
+  <form *ngIf="!loading()" (ngSubmit)="onSubmit()" class="lecture-form" novalidate>
+    <header class="page-header">
+      <h1>{{ isEditMode() ? 'Edit Lesson' : 'Add New Lesson' }}</h1>
+      <p>Share your knowledge by adding high-quality content</p>
+    </header>
+
+    <!-- Error Message -->
+    <div *ngIf="error()" class="error-message">⚠️ {{ error() }}</div>
+
+    <!-- Title -->
+    <div class="form-group">
+      <label for="title">Lesson Title *</label>
+      <input type="text" id="title" [(ngModel)]="lessonData.title" name="title" required
+        placeholder="e.g. Introduction to Variables" class="form-input" autocomplete="off" />
+    </div>
+
+    <div class="form-row">
+      <!-- Content Type -->
+      <div class="form-group half-width">
+        <label for="contentType">Content Type</label>
+        <div class="select-wrapper">
+          <select id="contentType" [(ngModel)]="lessonData.contentType" name="contentType" class="form-select">
+            <option [ngValue]="undefined" disabled>Select Check Type</option>
+            <option *ngFor="let opt of contentTypeOptions" [ngValue]="opt.value">
+              {{ opt.label }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Duration -->
+      <div class="form-group half-width">
+        <label for="durationMinutes">Duration (Minutes)</label>
+        <div class="input-with-icon">
+          <span class="prefix">⏱️</span>
+          <input type="number" id="durationMinutes" [(ngModel)]="lessonData.durationMinutes" name="durationMinutes"
+            min="0" placeholder="0" class="form-input" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Content URL (Hidden until populated) -->
+    <div class="form-group" *ngIf="lessonData.contentUrl">
+      <label for="contentUrl">Content URL</label>
+      <input type="url" id="contentUrl" [(ngModel)]="lessonData.contentUrl" name="contentUrl"
+        placeholder="https://example.com/video.mp4" class="form-input" readonly />
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" (click)="openModal()" [class.btn-success]="uploadStatus() === 'success'"
+        [class.btn-info]="uploadStatus() !== 'success'" [disabled]="uploadStatus() === 'success'"
+        class="btn-upload-trigger">
+        {{ uploadStatus() === 'success' ? 'Upload Success ✓' : (isEditMode() ? 'Edit Content' : 'Upload Content') }}
+      </button>
+      <button type="button" (click)="cancel()" class="btn-secondary">Cancel</button>
+      <button type="submit" [disabled]="submitting()" class="btn-primary">
+        {{
+        submitting()
+        ? isEditMode()
+        ? 'Updating...'
+        : 'Creating...'
+        : isEditMode()
+        ? 'Update Lesson'
+        : 'Create
+        Lesson'
+        }}
+      </button>
+    </div>
+  </form>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading lesson details...</p>
+  </div>
+
+  <!-- Upload Content Modal -->
+  <div *ngIf="showUploadModal()" class="modal-overlay">
+    <div class="modal-content">
+      <header class="modal-header">
+        <h2>{{ isEditMode() ? 'Manage Content' : 'Add Content' }}</h2>
+        <button type="button" class="close-btn" (click)="closeModal()">×</button>
+      </header>
+      <div class="modal-body">
+        <!-- Existing Content List -->
+        <div *ngIf="lessonData.contentUrl" class="existing-content mb-4">
+          <label>Current Content</label>
+          <div class="content-item">
+            <span class="content-icon">📄</span>
+            <a href="javascript:void(0)" (click)="viewContent()" class="content-link" title="{{lessonData.contentUrl}}">
+              Current File ({{lessonData.contentUrl | slice:0:30}}{{lessonData.contentUrl!.length > 30 ? '...' : ''}})
+            </a>
+            <div class="item-actions">
+              <button type="button" class="btn-view-sm" (click)="viewContent()" title="View Content">
+                👁️
+              </button>
+              <button type="button" class="btn-delete-sm" (click)="deleteContent()" title="Delete Content">
+                🗑️
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Selected Content Type</label>
+          <select [ngModel]="lessonData.contentType" disabled class="form-select">
+            <option *ngFor="let opt of contentTypeOptions" [ngValue]="opt.value">
+              {{ opt.label }}
+            </option>
+          </select>
+        </div>
+
+        <!-- File Upload Section -->
+        <div class="form-group">
+          <label for="contentFile">Select File for Upload</label>
+          <input type="file" id="contentFile" (change)="onFileSelected($event)" class="form-input file-input" />
+        </div>
+
+        <!-- Review Section -->
+        <div *ngIf="selectedFile()" class="file-review">
+          <h4>Review Selection:</h4>
+          <p><strong>Name:</strong> {{ selectedFile()?.name }}</p>
+          <p><strong>Size:</strong> {{ (selectedFile()!.size / 1024 / 1024) | number:'1.2-2' }} MB</p>
+        </div>
+
+        <div *ngIf="uploadStatus() === 'uploading'" class="upload-progress">
+          <div class="spinner-sm"></div>
+          <p>Uploading... Please wait.</p>
+        </div>
+      </div>
+      <footer class="modal-footer">
+        <button type="button" class="btn-secondary" (click)="closeModal()">Close</button>
+        <button type="button" class="btn-primary" (click)="uploadContent()"
+          [disabled]="!selectedFile() || uploadStatus() === 'uploading'">
+          {{ uploadStatus() === 'uploading' ? 'Uploading...' : 'Upload' }}
+        </button>
+      </footer>
+    </div>
+  </div>
+</div>

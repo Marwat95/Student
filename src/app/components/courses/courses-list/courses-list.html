@@ -1,0 +1,104 @@
+<div class="courses-list-page">
+  <!-- Animated Background Orbs -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <!-- Back Button - Only show when filtering by instructor -->
+  <div class="back-button-container" *ngIf="instructorId()">
+    <app-back-button></app-back-button>
+  </div>
+
+  <header class="page-header">
+    <h1 *ngIf="!instructorId()">Browse Courses</h1>
+    <h1 *ngIf="instructorId() && instructorName()">Courses by {{ instructorName() }}</h1>
+    <p *ngIf="!instructorId()">Discover amazing courses to enhance your skills</p>
+    <p *ngIf="instructorId() && instructorName()">Explore courses taught by {{ instructorName() }}</p>
+  </header>
+
+  <!-- Search Bar -->
+  <section class="search-section">
+    <div class="search-box">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="onSearch()"
+        placeholder="Search courses..."
+        class="search-input"
+      />
+      <button (click)="onSearch()" class="search-button">🔍 Search</button>
+    </div>
+  </section>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading courses...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error() && !loading()" class="error-state">
+    <p>{{ error() }}</p>
+    <button (click)="loadCourses()">Retry</button>
+  </div>
+
+  <!-- Courses Grid -->
+  <div *ngIf="!loading() && !error()">
+    <div *ngIf="courses().length === 0" class="empty-state">
+      <div class="empty-icon">📚</div>
+      <h3>No courses found</h3>
+      <p *ngIf="searchQuery()">Try adjusting your search terms</p>
+      <p *ngIf="!searchQuery()">No courses available at the moment</p>
+    </div>
+
+    <div *ngIf="courses().length > 0" class="courses-grid">
+      <div *ngFor="let course of courses()" class="course-card" (click)="navigateToCourse(course.courseId)">
+        <div class="course-thumbnail" *ngIf="course.thumbnailUrl">
+          <img [src]="course.thumbnailUrl" [alt]="course.title" title="{{ course.title }}" />
+        </div>
+        <div class="course-content">
+          <h3 class="course-title">{{ course.title }}</h3>
+          <p class="course-description">{{ course.description | slice:0:100 }}{{ course.description.length > 100 ? '...' : '' }}</p>
+          
+          <div class="course-meta">
+            <span class="instructor">👤 {{ course.instructorName || 'Unknown Instructor' }}</span>
+            <span class="rating">⭐ {{ course.averageRating | number:'1.1-1' }}</span>
+          </div>
+
+          <div class="course-stats">
+            <span>📖 {{ course.lessonsCount }} Lessons</span>
+            <span>👥 {{ course.enrollmentCount }} Students</span>
+          </div>
+
+          <div class="course-footer">
+            <span class="course-price">{{ formatPrice(course.price) }}</span>
+            <span *ngIf="course.popular" class="popular-badge">🔥 Popular</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="totalPages() > 1" class="pagination">
+      <button
+        (click)="onPageChange(pageNumber() - 1)"
+        [disabled]="pageNumber() === 1"
+        class="pagination-button"
+      >
+        ← Previous
+      </button>
+      
+      <span class="pagination-info">
+        Page {{ pageNumber() }} of {{ totalPages() }} ({{ totalCount() }} courses)
+      </span>
+      
+      <button
+        (click)="onPageChange(pageNumber() + 1)"
+        [disabled]="pageNumber() === totalPages()"
+        class="pagination-button"
+      >
+        Next →
+      </button>
+    </div>
+  </div>
+</div>

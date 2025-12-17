@@ -1,0 +1,181 @@
+<div class="checkout-page">
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="state state-loading">
+    <div class="spinner"></div>
+    <p>Loading checkout...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error() && !loading() && !success()" class="state state-error">
+    <div class="error-icon">❌</div>
+    <p><strong>Error:</strong> {{ error() }}</p>
+    <button type="button" class="btn btn-secondary" (click)="goBack()">
+      <span class="btn-icon">⬅️</span>
+      Go Back
+    </button>
+  </div>
+
+  <!-- Success State -->
+  <div *ngIf="success()" class="state state-success">
+    <div class="success-icon">✅</div>
+    <h2>Payment Successful!</h2>
+    <p>You have successfully enrolled in the course.</p>
+    <p class="redirect-message">Redirecting to your payments...</p>
+  </div>
+
+  <!-- Checkout Form -->
+  <div *ngIf="!loading() && !error() && !success() && course()" class="checkout-container">
+    <header class="checkout-header">
+      <button type="button" class="back-btn" (click)="goBack()">
+        <span class="btn-icon">⬅️</span>
+        Back to Course
+      </button>
+      <h1>💳 Secure Checkout</h1>
+      <p class="subtitle">Complete your payment to enroll in the course</p>
+    </header>
+
+    <div class="checkout-grid">
+      <!-- Course Summary -->
+      <div class="course-summary">
+        <h2>📚 Course Summary</h2>
+
+        <div class="summary-card">
+          <div class="course-thumbnail" *ngIf="course()!.thumbnailUrl">
+            <img [src]="course()!.thumbnailUrl" [alt]="course()!.title" />
+          </div>
+          <div class="course-thumbnail-placeholder" *ngIf="!course()!.thumbnailUrl">🎓</div>
+
+          <div class="course-info">
+            <h3>{{ course()!.title }}</h3>
+            <p class="instructor">By {{ course()!.instructorName || 'Unknown Instructor' }}</p>
+
+            <div class="course-stats">
+              <span class="stat">
+                <span class="stat-icon">⭐</span>
+                {{ course()!.averageRating | number : '1.1-1' }}
+              </span>
+              <span class="stat">
+                <span class="stat-icon">👥</span>
+                {{ course()!.enrollmentCount }} students
+              </span>
+            </div>
+          </div>
+
+          <div class="price-summary">
+            <div class="price-row">
+              <span class="label">Course Price:</span>
+              <span class="price">{{ formatPrice(course()!.price) }}</span>
+            </div>
+            <div class="price-row total">
+              <span class="label">Total Amount:</span>
+              <span class="price">{{ formatPrice(course()!.price) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Form -->
+      <div class="payment-form-section">
+        <h2>💳 Payment Information</h2>
+
+        <form class="payment-form" (ngSubmit)="processPayment()">
+          <!-- Card Number -->
+          <div class="form-group">
+            <label class="form-label">
+              <span class="label-icon">💳</span>
+              Card Number
+            </label>
+            <input
+              type="text"
+              class="form-input"
+              [(ngModel)]="cardNumber"
+              name="cardNumber"
+              placeholder="1234 5678 9012 3456"
+              maxlength="19"
+              (input)="formatCardNumber($event)"
+              required
+            />
+          </div>
+
+          <!-- Card Holder -->
+          <div class="form-group">
+            <label class="form-label">
+              <span class="label-icon">👤</span>
+              Card Holder Name
+            </label>
+            <input
+              type="text"
+              class="form-input"
+              [(ngModel)]="cardHolder"
+              name="cardHolder"
+              placeholder="John Doe"
+              required
+            />
+          </div>
+
+          <!-- Expiry & CVV -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">
+                <span class="label-icon">📅</span>
+                Expiry Date
+              </label>
+              <div class="expiry-inputs">
+                <select class="form-select" [(ngModel)]="expiryMonth" name="expiryMonth" required>
+                  <option value="">MM</option>
+                  <option
+                    *ngFor="let month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
+                    [value]="month"
+                  >
+                    {{ month < 10 ? '0' + month : month }}
+                  </option>
+                </select>
+                <span class="separator">/</span>
+                <select class="form-select" [(ngModel)]="expiryYear" name="expiryYear" required>
+                  <option value="">YY</option>
+                  <option *ngFor="let year of [24, 25, 26, 27, 28, 29, 30]" [value]="year">
+                    {{ year }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <span class="label-icon">🔒</span>
+                CVV
+              </label>
+              <input
+                type="password"
+                class="form-input"
+                [(ngModel)]="cvv"
+                name="cvv"
+                placeholder="123"
+                maxlength="3"
+                (input)="formatCVV($event)"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Security Info -->
+          <div class="security-info">
+            <span class="security-icon">🔒</span>
+            <p>Your payment information is secure and encrypted</p>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary btn-submit" [disabled]="processing()">
+            <span class="btn-icon" *ngIf="!processing()">✓</span>
+            <span class="spinner-small" *ngIf="processing()"></span>
+            {{ processing() ? 'Processing Payment...' : 'Pay ' + formatPrice(course()!.price) }}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

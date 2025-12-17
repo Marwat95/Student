@@ -1,0 +1,310 @@
+<div class="promo-codes-container">
+  <!-- Floating decorative elements -->
+  <div class="floating-element element-1">🏷️</div>
+  <div class="floating-element element-2">⭐</div>
+  <div class="floating-element element-3">📈</div>
+  <div class="floating-element element-4">🎯</div>
+  
+  <div class="header">
+    <h1>Promo Codes Management</h1>
+    <button class="btn-primary" (click)="openCreateModal()">
+      <i class="icon-plus"></i> Create New Promo Code
+    </button>
+  </div>
+
+  <!-- Error Message -->
+  <ng-container *ngIf="error()">
+    <div class="alert alert-danger">
+      {{ error() }}
+      <button class="close-btn" (click)="error.set(null)">&times;</button>
+    </div>
+  </ng-container>
+
+  <!-- Loading State -->
+  <ng-container *ngIf="loading()">
+    <div class="loading">
+      <p>Loading promo codes...</p>
+    </div>
+  </ng-container>
+
+  <!-- Empty State -->
+  <ng-container *ngIf="!loading() && promoCodes().length === 0">
+    <div class="empty-state">
+      <p>No promo codes found</p>
+      <button class="btn-primary" (click)="openCreateModal()">Create First Promo Code</button>
+    </div>
+  </ng-container>
+
+  <!-- Promo Codes Grid -->
+  <ng-container *ngIf="!loading() && promoCodes().length > 0">
+    <div class="promo-codes-grid">
+      <div class="promo-code-card" *ngFor="let code of promoCodes()">
+        <div class="card-header">
+          <h3>{{ code.code }}</h3>
+          <span [ngClass]="'badge ' + getStatusBadgeClass(code)">
+            {{ getStatusText(code) }}
+          </span>
+        </div>
+
+        <div class="card-body">
+          <p class="description">{{ code.description }}</p>
+
+          <div class="details">
+            <div class="detail-item">
+              <span class="label">Discount</span>
+              <span class="value">{{ code.discountPercentage }}%</span>
+            </div>
+
+            <div class="detail-item" *ngIf="code.maxDiscountAmount">
+              <span class="label">Max Discount</span>
+              <span class="value">${{ code.maxDiscountAmount }}</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="label">Usage</span>
+              <span class="value">
+                {{ code.currentUsageCount }}
+                <ng-container *ngIf="code.maxUsageCount !== -1">/ {{ code.maxUsageCount }}</ng-container>
+              </span>
+            </div>
+
+            <div class="detail-item">
+              <span class="label">Valid From</span>
+              <span class="value">{{ formatDate(code.validFrom) }}</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="label">Valid Until</span>
+              <span class="value">{{ formatDate(code.validUntil) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <button class="btn-secondary" (click)="openEditModal(code)">
+            <i class="icon-edit"></i> Edit
+          </button>
+          <button class="btn-danger" (click)="deletePromoCode(code.promoCodeId)">
+            <i class="icon-trash"></i> Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalPages() > 1">
+      <button [disabled]="pageNumber() === 1" (click)="goToPage(pageNumber() - 1)">
+        Previous
+      </button>
+
+      <span class="page-info">
+        Page {{ pageNumber() }} of {{ totalPages() }} ({{ totalCount() }} total)
+      </span>
+
+      <button [disabled]="pageNumber() === totalPages()" (click)="goToPage(pageNumber() + 1)">
+        Next
+      </button>
+    </div>
+  </ng-container>
+
+  <!-- Create Modal -->
+  <div class="modal-overlay" *ngIf="showCreateModal()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Create New Promo Code</h2>
+        <button class="close-btn" (click)="closeCreateModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="code">Promo Code *</label>
+          <input
+            type="text"
+            id="code"
+            [(ngModel)]="formData.code"
+            placeholder="e.g., SAVE20"
+            class="form-control"
+          />
+          <small>Code will be converted to uppercase</small>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description *</label>
+          <textarea
+            id="description"
+            [(ngModel)]="formData.description"
+            placeholder="e.g., 20% off for new instructors"
+            class="form-control"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="discount">Discount Percentage (%) *</label>
+            <input
+              type="number"
+              id="discount"
+              [(ngModel)]="formData.discountPercentage"
+              min="0"
+              max="100"
+              placeholder="e.g., 20"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="maxDiscount">Max Discount Amount ($)</label>
+            <input
+              type="number"
+              id="maxDiscount"
+              [(ngModel)]="formData.maxDiscountAmount"
+              min="0"
+              placeholder="e.g., 50"
+              class="form-control"
+            />
+            <small>Optional. Leave blank for unlimited</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="maxUsage">Max Usage Count *</label>
+          <input
+            type="number"
+            id="maxUsage"
+            [(ngModel)]="formData.maxUsageCount"
+            placeholder="e.g., 100 (-1 for unlimited)"
+            class="form-control"
+          />
+          <small>Use -1 for unlimited uses</small>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="validFrom">Valid From *</label>
+            <input
+              type="date"
+              id="validFrom"
+              [(ngModel)]="formData.validFrom"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="validUntil">Valid Until *</label>
+            <input
+              type="date"
+              id="validUntil"
+              [(ngModel)]="formData.validUntil"
+              class="form-control"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeCreateModal()">Cancel</button>
+        <button class="btn-primary" (click)="createPromoCode()">Create Promo Code</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal-overlay" *ngIf="showEditModal()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Promo Code</h2>
+        <button class="close-btn" (click)="closeEditModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="editCode">Promo Code *</label>
+          <input
+            type="text"
+            id="editCode"
+            [(ngModel)]="formData.code"
+            placeholder="e.g., SAVE20"
+            class="form-control"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="editDescription">Description *</label>
+          <textarea
+            id="editDescription"
+            [(ngModel)]="formData.description"
+            placeholder="e.g., 20% off for new instructors"
+            class="form-control"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editDiscount">Discount Percentage (%) *</label>
+            <input
+              type="number"
+              id="editDiscount"
+              [(ngModel)]="formData.discountPercentage"
+              min="0"
+              max="100"
+              placeholder="e.g., 20"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="editMaxDiscount">Max Discount Amount ($)</label>
+            <input
+              type="number"
+              id="editMaxDiscount"
+              [(ngModel)]="formData.maxDiscountAmount"
+              min="0"
+              placeholder="e.g., 50"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="editMaxUsage">Max Usage Count *</label>
+          <input
+            type="number"
+            id="editMaxUsage"
+            [(ngModel)]="formData.maxUsageCount"
+            placeholder="e.g., 100 (-1 for unlimited)"
+            class="form-control"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editValidFrom">Valid From *</label>
+            <input
+              type="date"
+              id="editValidFrom"
+              [(ngModel)]="formData.validFrom"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="editValidUntil">Valid Until *</label>
+            <input
+              type="date"
+              id="editValidUntil"
+              [(ngModel)]="formData.validUntil"
+              class="form-control"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeEditModal()">Cancel</button>
+        <button class="btn-primary" (click)="updatePromoCode()">Update Promo Code</button>
+      </div>
+    </div>
+  </div>
+</div>

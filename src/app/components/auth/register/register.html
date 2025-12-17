@@ -1,0 +1,240 @@
+<section class="register-page">
+  <!-- Animated Background Orbs -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+  <div class="bg-orb orb-4"></div>
+
+  <!-- Back to Home -->
+  <a routerLink="/" class="back-home">
+    <span class="back-icon">←</span>
+    <span>Back to Home</span>
+  </a>
+
+  <div class="register-container">
+    <!-- Left Side - Illustration -->
+    <div class="illustration-panel">
+      <div class="illustration-content">
+        <div class="welcome-badge">
+          <span class="badge-icon">✨</span>
+          <span>Start Your Journey</span>
+        </div>
+
+        <h2 class="illustration-title">Join Our Learning Community</h2>
+        <p class="illustration-text">
+          Get access to world-class courses, expert instructors, and a global community of learners.
+        </p>
+
+        <div class="features-list">
+          <div class="feature-item">
+            <span class="feature-icon">✅</span>
+            <span>500+ Expert Courses</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">✅</span>
+            <span>Certified Learning Paths</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">✅</span>
+            <span>24/7 Support</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">✅</span>
+            <span>Lifetime Access</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side - Form -->
+    <div class="register-card">
+      <div class="card-header">
+        <div class="logo-badge">
+          <span class="logo-icon">🎓</span>
+        </div>
+        <h1 class="card-title">Create Your Account</h1>
+        <p class="card-subtitle">Start learning today - it's free!</p>
+      </div>
+
+      <form
+        [formGroup]="registerForm"
+        (ngSubmit)="registerSubmit()"
+        class="register-form"
+        novalidate
+      >
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">
+              <span class="label-icon">👤</span>
+              <span>Full Name</span>
+            </label>
+            <input
+              type="text"
+              formControlName="fullName"
+              class="form-input"
+              placeholder="Enter your full name"
+              [class.input-error]="
+                fullNameControl?.invalid && (fullNameControl?.dirty || fullNameControl?.touched)
+              "
+              [class.input-success]="fullNameControl?.valid && fullNameControl?.dirty"
+            />
+            <small
+              *ngIf="
+                fullNameControl?.hasError('minlength') &&
+                (fullNameControl?.dirty || fullNameControl?.touched)
+              "
+              class="error-message"
+            >
+              <span class="error-icon">⚠️</span>
+              Name must be at least 3 characters
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <span class="label-icon">📧</span>
+              <span>Email Address</span>
+            </label>
+            <input
+              type="email"
+              formControlName="email"
+              class="form-input"
+              placeholder="your.email@example.com"
+              [class.input-error]="
+                emailControl?.invalid && (emailControl?.dirty || emailControl?.touched)
+              "
+              [class.input-success]="emailControl?.valid && emailControl?.dirty"
+            />
+            <small
+              *ngIf="
+                emailControl?.hasError('email') && (emailControl?.dirty || emailControl?.touched)
+              "
+              class="error-message"
+            >
+              <span class="error-icon">⚠️</span>
+              Enter a valid email address
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <span class="label-icon">🔒</span>
+              <span>Password</span>
+            </label>
+            <input
+              type="password"
+              formControlName="password"
+              class="form-input"
+              placeholder="Create a strong password"
+              [class.input-error]="
+                passwordControl?.invalid && (passwordControl?.dirty || passwordControl?.touched)
+              "
+              [class.input-success]="passwordControl?.valid && passwordControl?.dirty"
+            />
+            <small
+              *ngIf="
+                passwordControl?.hasError('pattern') &&
+                (passwordControl?.dirty || passwordControl?.touched)
+              "
+              class="error-message"
+            >
+              <span class="error-icon">⚠️</span>
+              At least 6 characters required
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <span class="label-icon">🔐</span>
+              <span>Confirm Password</span>
+            </label>
+            <input
+              type="password"
+              formControlName="confirmPassword"
+              class="form-input"
+              placeholder="Re-enter your password"
+              [class.input-error]="
+                (confirmPasswordControl?.invalid || registerForm.hasError('passwordMismatch')) &&
+                (confirmPasswordControl?.dirty || confirmPasswordControl?.touched)
+              "
+              [class.input-success]="
+                confirmPasswordControl?.valid &&
+                !registerForm.hasError('passwordMismatch') &&
+                confirmPasswordControl?.dirty
+              "
+            />
+            <small
+              *ngIf="
+                registerForm.hasError('passwordMismatch') &&
+                (confirmPasswordControl?.dirty || confirmPasswordControl?.touched)
+              "
+              class="error-message"
+            >
+              <span class="error-icon">⚠️</span>
+              Passwords do not match
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label">
+            <span class="label-icon">🎭</span>
+            <span>I want to join as</span>
+          </label>
+          <select
+            formControlName="role"
+            class="form-select"
+            [class.input-error]="
+              roleControl?.invalid && (roleControl?.dirty || roleControl?.touched)
+            "
+            [class.input-success]="roleControl?.valid && roleControl?.dirty"
+          >
+            <option value="" disabled selected>Select your role</option>
+            <option value="2">🎓 Student - Learn new skills</option>
+            <option value="1">👨‍🏫 Instructor - Teach and inspire</option>
+          </select>
+        </div>
+
+        <!-- Subscription packages selection removed from registration -->
+
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="registerForm.invalid || isLoading"
+          [class.loading]="isLoading"
+        >
+          <span *ngIf="!isLoading" class="btn-content">
+            <span>Create My Account</span>
+            <span class="btn-arrow">→</span>
+          </span>
+          <span *ngIf="isLoading" class="btn-loading">
+            <span class="spinner"></span>
+            <span>Creating your account...</span>
+          </span>
+        </button>
+
+        <p class="form-disclaimer">
+          <span class="disclaimer-icon">🔒</span>
+          By signing up, you agree to our
+          <a routerLink="/terms" class="link">Terms</a> and
+          <a routerLink="/privacy" class="link">Privacy Policy</a>
+        </p>
+
+        <div *ngIf="msgError" class="alert alert-error">
+          <span class="alert-icon">❌</span>
+          <span>{{ msgError }}</span>
+        </div>
+
+        <div *ngIf="msgSuccess" class="alert alert-success">
+          <span class="alert-icon">✅</span>
+          <span>{{ msgSuccess }}</span>
+        </div>
+
+        <p class="login-prompt">
+          Already have an account?
+          <a routerLink="/login" class="login-link">Sign in here</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</section>

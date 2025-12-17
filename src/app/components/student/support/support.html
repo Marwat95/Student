@@ -1,0 +1,257 @@
+<div class="support-page">
+  <!-- Animated Background Shapes -->
+  <div class="background-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+  </div>
+
+  <!-- Back to Dashboard Button -->
+  <div class="dashboard-nav">
+    <app-back-button></app-back-button>
+  </div>
+
+  <!-- Page Title with Icon -->
+  <div class="page-title-wrapper">
+    <div class="title-icon">
+      <span class="icon-emoji">🎫</span>
+      <div class="icon-ring"></div>
+    </div>
+    <div class="title-content">
+      <h1 class="page-title">Support Center</h1>
+      <p class="page-subtitle">Get help and track your support tickets</p>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading() && !tickets().length) {
+  <div class="state state-loading">
+    <div class="spinner"></div>
+    <p>Loading tickets...</p>
+  </div>
+  }
+
+  <!-- Error State -->
+  @if (error() && !loading() && !tickets().length) {
+  <div class="state state-error">
+    <p>⚠️ {{ error() }}</p>
+  </div>
+  }
+
+  <!-- Create Ticket Form Modal -->
+  @if (creating()) {
+  <div class="modal-overlay" (click)="cancelCreate()">
+    <section class="create-ticket-form" (click)="$event.stopPropagation()">
+      <div class="form-header">
+        <div class="form-icon">
+          <span>📝</span>
+        </div>
+        <h3>Create New Support Ticket</h3>
+        <button class="close-btn" (click)="cancelCreate()">✕</button>
+      </div>
+
+      <div class="form-body">
+        @if (submitError()) {
+        <div class="alert alert-error">
+          <span class="alert-icon">⚠️</span>
+          {{ submitError() }}
+        </div>
+        }
+
+        <div class="form-group">
+          <label>
+            <span class="label-icon">📝</span>
+            Subject
+          </label>
+          <input 
+            type="text" 
+            [(ngModel)]="createModel.subject" 
+            placeholder="Brief description of your issue" 
+          />
+        </div>
+
+        <div class="form-group">
+          <label>
+            <span class="label-icon">💬</span>
+            Description
+          </label>
+          <textarea 
+            rows="5" 
+            [(ngModel)]="createModel.description"
+            placeholder="Describe your issue in detail..."
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-cancel" (click)="cancelCreate()">
+          <span class="btn-icon">✕</span>
+          <span class="btn-text">Cancel</span>
+        </button>
+        <button type="button" class="btn btn-submit" (click)="submitTicket()">
+          <span class="btn-icon">✔️</span>
+          <span class="btn-text">Submit Ticket</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </section>
+  </div>
+  }
+
+  <!-- DETAIL VIEW -->
+  @if (selectedTicket()) {
+  <div class="ticket-details-view">
+    <button class="btn-back" (click)="backToList()">
+      <span class="back-icon">←</span>
+      <span>Back to List</span>
+    </button>
+
+    <!-- Resolved Status Notice -->
+    @if (selectedTicket()?.status?.toLowerCase() === 'resolved') {
+    <div class="success-notice">
+      <h3>✅ Ticket Resolved</h3>
+      <p>This ticket has been resolved successfully.</p>
+    </div>
+    }
+
+    <div class="details-card">
+      <header class="details-header">
+        <div class="header-top">
+          <h2>{{ selectedTicket()?.subject }}</h2>
+          <span class="status-badge" [ngClass]="getStatusClass(selectedTicket()?.status)">
+            {{ selectedTicket()?.status || 'Open' }}
+          </span>
+        </div>
+
+        <div class="meta-row">
+          <span class="meta-item"><strong>Ticket ID:</strong> {{ selectedTicket()?.ticketId | slice : 0 : 8 }}</span>
+          <span class="meta-item"><strong>Created:</strong> {{ selectedTicket()?.createdAt | date : 'medium' }}</span>
+          @if (selectedTicket()?.assignedTo) {
+          <span class="meta-item"><strong>Assigned To:</strong> {{ selectedTicket()?.assignedTo }}</span>
+          }
+        </div>
+      </header>
+
+      <div class="details-body">
+        <h3>Description</h3>
+        <p>{{ selectedTicket()?.description }}</p>
+      </div>
+
+      <!-- Admin Response Section -->
+      @if (selectedTicket()?.response) {
+      <div class="admin-response-section">
+        <h3>📧 Admin Response</h3>
+        <div class="response-card">
+          <p>{{ selectedTicket()?.response }}</p>
+        </div>
+      </div>
+      } @if (selectedTicket()?.updatedAt) {
+      <div class="details-footer">
+        <small>Last Updated: {{ selectedTicket()?.updatedAt | date : 'short' }}</small>
+      </div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- LIST VIEW -->
+  @else {
+  <!-- Empty State -->
+  @if (!loading() && !hasTickets() && !error()) {
+  <div class="state state-empty">
+    <div class="empty-illustration">
+      <div class="empty-icon">📫</div>
+      <div class="empty-circles">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+      </div>
+    </div>
+    <h3>No Support Tickets Yet</h3>
+    <p>You haven't created any support tickets. Click the button above to get started.</p>
+    <button class="btn btn-primary" (click)="openCreate()">
+      <span class="btn-icon">➕</span>
+      <span class="btn-text">Create Your First Ticket</span>
+    </button>
+  </div>
+  }
+
+  <!-- Tickets List -->
+  @if (hasTickets()) {
+  <section class="tickets-list">
+    @for (ticket of tickets(); track ticket.ticketId) {
+    <article class="ticket-card" (click)="viewDetails(ticket)">
+      <div class="card-accent"></div>
+      <div class="ticket-header">
+        <div class="ticket-status-wrapper">
+          <span class="status-dot" [ngClass]="getStatusClass(ticket.status)"></span>
+          <span class="status-badge" [ngClass]="getStatusClass(ticket.status)">
+            {{ ticket.status || 'Open' }}
+          </span>
+        </div>
+        <div class="ticket-date-wrapper">
+          <span class="date-icon">📅</span>
+          <span>{{ ticket.createdAt | date : 'MMM d, y' }}</span>
+        </div>
+      </div>
+      
+      <div class="ticket-content">
+        <h4 class="ticket-subject">{{ ticket.subject }}</h4>
+        <div class="ticket-meta">
+          <div class="meta-item">
+            <span class="meta-icon">🕒</span>
+            <span>{{ ticket.createdAt | date : 'shortTime' }}</span>
+          </div>
+          <div class="meta-divider">•</div>
+          <div class="meta-item">
+            <span class="meta-icon">🎫</span>
+            <span>ID: {{ ticket.ticketId | slice : 0 : 8 }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="ticket-footer">
+        <button class="btn-view">
+          <span>View Details</span>
+          <span class="arrow">→</span>
+        </button>
+      </div>
+    </article>
+    }
+  </section>
+  }
+
+  <!-- Pagination -->
+  @if (ticketsCount() > 0) {
+  <div class="pagination">
+    <button type="button" class="page-btn" [disabled]="pageNumber() === 1" (click)="goToPage(pageNumber() - 1)">
+      ← Previous
+    </button>
+
+    <span class="page-info"> Page {{ pageNumber() }} | Total: {{ ticketsCount() }} tickets </span>
+
+    <button type="button" class="page-btn" [disabled]="pageNumber() >= Math.ceil(totalRecords() / pageSize())"
+      (click)="goToPage(pageNumber() + 1)">
+      Next →
+    </button>
+  </div>
+  } }
+
+  <!-- Debug Panel -->
+  <div class="debug-panel">
+    <details>
+      <summary>🔍 Debug Info</summary>
+      <div class="debug-content">
+        <p><strong>Loading:</strong> {{ loading() }}</p>
+        <p><strong>Tickets Count:</strong> {{ ticketsCount() }}</p>
+        <p><strong>Has Tickets:</strong> {{ hasTickets() }}</p>
+        <p><strong>Total Records:</strong> {{ totalRecords() }}</p>
+        <p><strong>Page:</strong> {{ pageNumber() }}</p>
+        <p><strong>Page Size:</strong> {{ pageSize() }}</p>
+        <p><strong>Error:</strong> {{ error() || 'None' }}</p>
+        <p><strong>Selected Ticket:</strong> {{ selectedTicket()?.ticketId || 'None' }}</p>
+      </div>
+    </details>
+  </div>
+</div>

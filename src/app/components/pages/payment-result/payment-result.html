@@ -1,0 +1,102 @@
+<div class="payment-result-page">
+  <!-- Background decorations -->
+  <div class="bg-decoration">
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="result-card loading-state">
+    <div class="spinner-container">
+      <div class="spinner"></div>
+    </div>
+    <h2>Verifying Payment...</h2>
+    <p>Please wait while we confirm your payment</p>
+  </div>
+
+  <!-- Success State -->
+  <div *ngIf="!loading() && success()" class="result-card success-state">
+    <!-- Confetti effect -->
+    <div class="confetti">
+      <span *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]" class="confetti-piece"></span>
+    </div>
+
+    <div class="status-icon success">
+      <span class="icon">✓</span>
+    </div>
+
+    <h1>Payment Successful!</h1>
+    <p class="subtitle">Thank you for your purchase</p>
+
+    <!-- Transaction Details -->
+    <div class="transaction-details" *ngIf="verification()">
+      <h3>Transaction Details</h3>
+      <div class="details-grid">
+        <div class="detail-item" *ngIf="verification()!.transactionId">
+          <span class="label">Transaction ID</span>
+          <span class="value">{{ verification()!.transactionId }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Amount Paid</span>
+          <span class="value amount">{{ formatCurrency(verification()!.amount) }}</span>
+        </div>
+        <div class="detail-item" *ngIf="verification()!.cardType">
+          <span class="label">Payment Method</span>
+          <span class="value">{{ verification()!.cardType }} {{ verification()!.maskedCard ? '****' + verification()!.maskedCard : '' }}</span>
+        </div>
+        <div class="detail-item" *ngIf="verification()!.paidAt">
+          <span class="label">Date</span>
+          <span class="value">{{ formatDate(verification()!.paidAt) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="result-actions">
+      <button *ngIf="paymentType() === 'course'" class="btn btn-primary" (click)="goToCourse()">
+        <span class="btn-icon">📚</span>
+        Go to My Courses
+      </button>
+      <button *ngIf="paymentType() === 'subscription'" class="btn btn-primary" (click)="goToSubscription()">
+        <span class="btn-icon">🎯</span>
+        View Subscription
+      </button>
+      <button class="btn btn-secondary" (click)="goToDashboard()">
+        Go to Dashboard
+      </button>
+    </div>
+  </div>
+
+  <!-- Failure State -->
+  <div *ngIf="!loading() && !success()" class="result-card failure-state">
+    <div class="status-icon failure">
+      <span class="icon">✕</span>
+    </div>
+
+    <h1>Payment Failed</h1>
+    <p class="subtitle">{{ error() || verification()?.errorMessage || 'Something went wrong with your payment' }}</p>
+
+    <!-- Error Details -->
+    <div class="error-details" *ngIf="verification()">
+      <div class="error-card">
+        <span class="error-icon">⚠️</span>
+        <div class="error-info">
+          <p class="error-title">Payment could not be processed</p>
+          <p class="error-desc">Please check your payment details and try again</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="result-actions">
+      <button class="btn btn-primary" (click)="tryAgain()">
+        <span class="btn-icon">🔄</span>
+        Try Again
+      </button>
+      <button class="btn btn-secondary" (click)="goHome()">
+        Go to Home
+      </button>
+    </div>
+  </div>
+</div>

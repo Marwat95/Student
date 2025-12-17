@@ -1,0 +1,104 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="close()">
+  <div class="modal-container" (click)="preventClose($event)">
+    <!-- Floating decorative elements -->
+    <div class="floating-element element-1">💳</div>
+    <div class="floating-element element-2">✨</div>
+    <div class="floating-element element-3">🔒</div>
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <div class="header-icon">
+        <span class="icon">💳</span>
+      </div>
+      <h2>Complete Your Payment</h2>
+      <button class="btn-close" (click)="close()" [disabled]="loading()">
+        <span>✕</span>
+      </button>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="order-summary" *ngIf="data">
+      <h3>Order Summary</h3>
+      <div class="summary-card">
+        <div class="item-info">
+          <span class="item-icon">{{ data.type === 'course' ? '📚' : '🎯' }}</span>
+          <div class="item-details">
+            <p class="item-name">{{ data.itemName }}</p>
+            <p class="item-type">{{ data.type === 'course' ? 'Course Enrollment' : 'Subscription Package' }}</p>
+          </div>
+        </div>
+        <div class="price-info">
+          <div class="amount-row total">
+            <span class="label">Total Amount</span>
+            <span class="value">{{ formatCurrency(data.amount) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Methods -->
+    <div class="payment-methods">
+      <h3>Payment Method</h3>
+      
+      <div class="method-options">
+        <!-- Paymob Option -->
+        <div 
+          class="method-card" 
+          [class.selected]="selectedPaymentMethod() === 'paymob'"
+          (click)="selectPaymentMethod('paymob')"
+        >
+          <div class="method-radio">
+            <div class="radio-outer">
+              <div class="radio-inner" *ngIf="selectedPaymentMethod() === 'paymob'"></div>
+            </div>
+          </div>
+          <div class="method-content">
+            <div class="method-name">Pay with Card</div>
+            <div class="method-icons">
+              <span class="card-icon visa">VISA</span>
+              <span class="card-icon mastercard">MC</span>
+              <span class="card-icon wallet">💳</span>
+            </div>
+            <p class="method-desc">Secure payment via Paymob</p>
+          </div>
+          <div class="method-badge">
+            <span class="secure-badge">🔒 Secure</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-message" *ngIf="error()">
+      <span class="error-icon">⚠️</span>
+      <span>{{ error() }}</span>
+    </div>
+
+    <!-- Actions -->
+    <div class="modal-actions">
+      <button class="btn btn-cancel" (click)="close()" [disabled]="loading()">
+        Cancel
+      </button>
+      <button 
+        class="btn btn-primary" 
+        (click)="proceedToPayment()" 
+        [disabled]="loading() || !data"
+      >
+        <span *ngIf="!loading()">
+          <span class="btn-icon">🔐</span>
+          Proceed to Payment
+        </span>
+        <span *ngIf="loading()" class="loading-spinner">
+          <span class="spinner"></span>
+          Processing...
+        </span>
+      </button>
+    </div>
+
+    <!-- Security Notice -->
+    <div class="security-notice">
+      <span class="notice-icon">🔒</span>
+      <span>Your payment is secured with 256-bit SSL encryption</span>
+    </div>
+  </div>
+</div>

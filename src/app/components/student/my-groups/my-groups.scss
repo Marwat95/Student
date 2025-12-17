@@ -1,0 +1,538 @@
+// ============ MY GROUPS - DASHBOARD STYLE ============
+// Matching Student Dashboard Style
+
+// ============ COLOR PALETTE ============
+$primary: #1c6f2b;
+$primary-dark: #0b3c2b;
+$secondary: #06b6d4;
+$secondary-dark: #0891b2;
+$success: #10b981;
+$warning: #f59e0b;
+$danger: #ef4444;
+
+$primary-gradient: linear-gradient(120deg, #1c6f2b 0%, #0b3c2b 100%);
+$secondary-gradient: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+
+$text-dark: #2d3748;
+$text-light: #718096;
+$text-lighter: #a0aec0;
+$bg-light: #f7fafc;
+$bg-white: #ffffff;
+$border-light: #e2e8f0;
+
+$card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+// ============ HOST & CONTAINER ============
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #f7fafc;
+  padding: 2.5rem 3rem;
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.my-groups-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+// ============ PAGE HEADER ============
+.page-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+  animation: fadeInDown 0.6s ease-out;
+
+  .header-content {
+    position: relative;
+  }
+
+  .back-btn {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: $bg-white;
+    border: 2px solid $border-light;
+    color: $primary;
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+      background: $primary;
+      color: white;
+      transform: translateX(-5px);
+      border-color: $primary;
+    }
+
+    .btn-icon {
+      font-size: 1rem;
+    }
+  }
+
+  h1 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: $text-dark;
+    margin: 0 0 1rem 0;
+    background: $primary-gradient;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding-bottom: 0.2rem;
+    line-height: 1.3;
+    position: relative;
+    display: inline-block;
+  }
+
+  .subtitle {
+    margin: 0 auto;
+    color: $text-light;
+    font-size: 1.1rem;
+    font-weight: 500;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+}
+
+// ============ BACKGROUND ORBS ============
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+
+  &.orb-1 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(28, 111, 43, 0.4), transparent);
+    top: -10%;
+    left: -5%;
+  }
+
+  &.orb-2 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.3), transparent);
+    bottom: -10%;
+    right: -5%;
+  }
+
+  &.orb-3 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.2), transparent);
+    top: 50%;
+    right: 10%;
+  }
+}
+
+// ============ LOADING STATE ============
+.state {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: $bg-white;
+  border-radius: 20px;
+  box-shadow: $card-shadow;
+  animation: slideInUp 0.4s ease-out;
+
+  &.state-loading {
+    .spinner {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border: 3px solid rgba(16, 185, 129, 0.2);
+        border-radius: 50%;
+        animation: spin 2s linear infinite;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 5px;
+        border: 3px solid transparent;
+        border-top-color: $primary;
+        border-right-color: $primary;
+        border-radius: 50%;
+        animation: spin 1s linear infinite reverse;
+      }
+    }
+
+    p {
+      color: $primary;
+      font-weight: 600;
+      animation: pulse 2s ease-in-out infinite;
+    }
+  }
+
+  &.state-error {
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+
+    .error-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      color: #991b1b;
+    }
+  }
+
+  &.state-empty {
+    background: $bg-white;
+    border: 2px dashed $border-light;
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    h3 {
+      color: $text-dark;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 1rem 0;
+    }
+
+    p {
+      color: $text-light;
+      margin: 0.5rem 0 0;
+      font-size: 0.95rem;
+    }
+
+    .info-message {
+      color: $primary;
+      font-weight: 500;
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background: rgba(28, 111, 43, 0.05);
+      border-radius: 10px;
+      display: inline-block;
+    }
+  }
+}
+
+// ============ GROUPS GRID ============
+.groups-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+// ============ GROUP CARD ============
+.group-card {
+  background: $bg-white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: $card-shadow;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  animation: slideInUp 0.5s ease-out both;
+
+  &:hover {
+    box-shadow: $hover-shadow;
+    transform: translateY(-8px);
+  }
+
+  .group-icon-wrapper {
+    background: $primary-gradient;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+    }
+
+    .group-icon {
+      width: 80px;
+      height: 80px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+
+      .icon-emoji {
+        font-size: 2.5rem;
+      }
+    }
+  }
+
+  .card-content {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .group-header {
+    margin-bottom: 0.75rem;
+  }
+
+  .group-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $text-dark;
+    margin: 0;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .group-description {
+    color: $text-light;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    flex: 1;
+  }
+
+  .group-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: $text-light;
+
+      .stat-icon {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .created-date {
+    font-size: 0.85rem;
+    color: $text-lighter;
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .date-icon {
+      font-size: 0.9rem;
+    }
+  }
+
+  .card-actions {
+    margin-top: auto;
+  }
+}
+
+// ============ BUTTONS ============
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  width: 100%;
+
+  &.btn-primary {
+    background: $primary-gradient;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(28, 111, 43, 0.3);
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(28, 111, 43, 0.4);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .btn-icon {
+    font-size: 1rem;
+  }
+}
+
+// ============ PAGINATION ============
+.pagination-section {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 2px solid $border-light;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  background: $bg-white;
+  border: 2px solid $border-light;
+  color: $primary;
+  padding: 0.7rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover:not(:disabled) {
+    background: $primary;
+    color: white;
+    border-color: $primary;
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .btn-icon {
+    font-size: 1rem;
+  }
+}
+
+.page-info {
+  font-size: 0.95rem;
+  color: $text-dark;
+  font-weight: 500;
+
+  strong {
+    color: $primary;
+    font-weight: 700;
+  }
+
+  .page-stats {
+    color: $text-light;
+    font-size: 0.85rem;
+    margin-left: 0.5rem;
+  }
+}
+
+// ============ ANIMATIONS ============
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+// ============ RESPONSIVE ============
+@media (max-width: 768px) {
+  :host {
+    padding: 1.5rem 1rem;
+  }
+
+  .groups-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .page-header {
+    .back-btn {
+      position: static;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+    }
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .page-btn {
+    width: 100%;
+  }
+}

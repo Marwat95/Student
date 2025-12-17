@@ -1,0 +1,220 @@
+// Footer Styles - Dark Theme with Lime Accents
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.app-footer {
+  background: linear-gradient(180deg, #0a3a42 0%, #042e33 100%);
+  color: #ffffff;
+  padding: 3rem 2rem 0;
+  margin-top: 4rem;
+  direction: rtl;
+  text-align: right;
+
+  a {
+    color: #d4f95c;
+    text-decoration: none;
+    transition: color 0.28s ease;
+
+    &:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+  }
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(212, 249, 92, 0.2);
+}
+
+.footer-section {
+  .section-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #d4f95c;
+    margin-bottom: 1rem;
+    letter-spacing: 0.5px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+
+    li {
+      margin-bottom: 0.6rem;
+      font-size: 0.95rem;
+
+      a {
+        display: inline-block;
+        padding: 0.3rem 0;
+        transition: all 0.28s ease;
+
+        &:hover {
+          padding-right: 0.5rem;
+          color: #ffffff;
+        }
+      }
+    }
+  }
+}
+
+.footer-contact {
+  text-align: right;
+
+  .phone {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #d4f95c;
+    margin-bottom: 1rem;
+    direction: ltr;
+    text-align: left;
+  }
+}
+
+.footer-design {
+  text-align: right;
+}
+
+.footer-stages {
+  text-align: right;
+}
+
+.social-icons {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+  .social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: #d4f95c;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    transition: all 0.3s cubic-bezier(0.22, 0.9, 0.32, 1);
+    color: #042e33;
+    text-decoration: none !important;
+
+    &:hover {
+      background: #ffffff;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(212, 249, 92, 0.3);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}
+
+.footer-copyright {
+  background: #d4f95c;
+  color: #042e33;
+  text-align: center;
+  padding: 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  p {
+    margin: 0;
+  }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .footer-content {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-footer {
+    padding: 2rem 1.5rem 0;
+    margin-top: 3rem;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .footer-section {
+    .section-title {
+      font-size: 1rem;
+    }
+
+    ul li {
+      font-size: 0.9rem;
+    }
+  }
+
+  .social-icons {
+    .social-icon {
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
+    }
+  }
+
+  .footer-copyright {
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-footer {
+    padding: 1.5rem 1rem 0;
+    margin-top: 2rem;
+  }
+
+  .footer-content {
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .footer-section {
+    .section-title {
+      font-size: 0.95rem;
+      margin-bottom: 0.8rem;
+    }
+
+    ul li {
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+    }
+  }
+
+  .social-icons {
+    gap: 0.6rem;
+
+    .social-icon {
+      width: 32px;
+      height: 32px;
+      font-size: 0.9rem;
+    }
+  }
+
+  .footer-copyright {
+    padding: 0.8rem;
+    font-size: 0.8rem;
+  }
+}

@@ -1,0 +1,65 @@
+<div class="group-form-wrapper">
+  <!-- Floating decorative elements -->
+  <div class="floating-element element-1">👥</div>
+  <div class="floating-element element-2">📚</div>
+  <div class="floating-element element-3">⭐</div>
+  <div class="floating-element element-4">💡</div>
+  
+  <div class="group-form-page">
+    <header class="page-header">
+      <h1>{{ isEditMode() ? 'Edit Group' : 'Create New Group' }}</h1>
+      <p>Fill in the group details</p>
+    </header>
+
+    <!-- Loading State -->
+    <div *ngIf="loading()" class="loading-state">
+      <p>Loading group details...</p>
+    </div>
+
+    <!-- Form -->
+    <form *ngIf="!loading()" (ngSubmit)="onSubmit()" class="group-form">
+    <!-- Error Message -->
+    <div *ngIf="error()" class="error-message">
+      {{ error() }}
+    </div>
+
+    <!-- Name -->
+    <div class="form-group">
+      <label for="name">Group Name *</label>
+      <input
+        type="text"
+        id="name"
+        [(ngModel)]="groupData.name"
+        name="name"
+        required
+        placeholder="Enter group name"
+        class="form-input"
+      />
+    </div>
+
+    <!-- Description -->
+    <div class="form-group">
+      <label for="description">Description *</label>
+      <textarea
+        id="description"
+        [(ngModel)]="groupData.description"
+        name="description"
+        required
+        rows="4"
+        placeholder="Enter group description"
+        class="form-textarea"
+      ></textarea>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" (click)="cancel()" class="btn-secondary">
+        Cancel
+      </button>
+      <button type="submit" [disabled]="submitting()" class="btn-primary">
+        {{ submitting() ? (isEditMode() ? 'Updating...' : 'Creating...') : (isEditMode() ? 'Update Group' : 'Create Group') }}
+      </button>
+    </div>
+  </form>
+  </div>
+</div>

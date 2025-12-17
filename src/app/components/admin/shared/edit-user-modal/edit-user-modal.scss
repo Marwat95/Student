@@ -1,0 +1,17 @@
+.avatar-circle-xl {
+    transition: transform 0.2s;
+}
+
+.avatar-circle-xl:hover {
+    transform: scale(1.02);
+}
+
+input:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+.modal-content {
+    border-radius: 1rem;
+    overflow: hidden;
+}

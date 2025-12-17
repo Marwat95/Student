@@ -1,0 +1,78 @@
+<div class="payments-container">
+    <div class="header-section">
+        <h1>Payments Management</h1>
+        <p class="text-muted">Overview of course sales and revenue</p>
+    </div>
+
+    <!-- Monthly Revenue Card -->
+    <div class="revenue-overview">
+        <div class="card revenue-card">
+            <div class="card-body">
+                <div class="icon-wrapper">
+                    <i class="bi bi-cash-coin"></i>
+                </div>
+                <div class="content">
+                    <h3>Total Revenue (This Month)</h3>
+                    <div class="amount" [class.loading]="loading()">
+                        {{ monthlyRevenue() | currency:'USD':'symbol':'1.0-0' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Courses Revenue List -->
+    <div class="courses-list-section">
+        <div class="section-header">
+            <h2>Course Revenue Breakdown</h2>
+        </div>
+
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Instructor</th>
+                        <th class="text-center">Total Sales</th>
+                        <th class="text-right">Total Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let course of courseRevenues()">
+                        <td>
+                            <div class="course-info">
+                                <span class="course-title">{{ course.courseTitle }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="instructor-info">
+                                <i class="bi bi-person-circle"></i>
+                                <span>{{ course.instructorName }}</span>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge sales-badge">{{ course.totalSales }} Sales</span>
+                        </td>
+                        <td class="text-right">
+                            <span class="revenue-amount">{{ course.totalRevenue | currency:'USD':'symbol':'1.0-0'
+                                }}</span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="courseRevenues().length === 0 && !loading()">
+                        <td colspan="4" class="text-center py-5 text-muted">
+                            <i class="bi bi-receipt d-block mb-2" style="font-size: 2rem;"></i>
+                            No payment records found
+                        </td>
+                    </tr>
+                    <tr *ngIf="loading()">
+                        <td colspan="4" class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,115 @@
+<div class="container-fluid p-4" *ngIf="!loading() && ticket()">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <button class="btn btn-outline-secondary mb-2" (click)="goBack()">
+                <i class="bi bi-arrow-left me-2"></i>Back to Tickets
+            </button>
+            <h2 class="fw-bold m-0">Ticket Details</h2>
+        </div>
+        <span class="badge rounded-pill fs-6" [class]="getStatusBadgeClass(ticket()!.status)">
+            {{ticket()!.status}}
+        </span>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column: Ticket Info -->
+        <div class="col-lg-8">
+            <!-- Ticket Information Card -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h3 class="fw-bold mb-3">{{ticket()!.subject}}</h3>
+                    
+                    <div class="mb-3">
+                        <label class="text-muted small">Description:</label>
+                        <p class="mb-0">{{ticket()!.description}}</p>
+                    </div>
+
+                    <div class="row g-3 mt-3">
+                        <div class="col-md-6">
+                            <label class="text-muted small">User ID:</label>
+                            <p class="mb-0 fw-medium">{{ticket()!.userId}}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">Created At:</label>
+                            <p class="mb-0 fw-medium">{{formatDate(ticket()!.createdAt)}}</p>
+                        </div>
+                        <div class="col-md-6" *ngIf="ticket()!.assignedTo">
+                            <label class="text-muted small">Assigned To:</label>
+                            <p class="mb-0 fw-medium">{{ticket()!.assignedTo}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reply Section -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-reply me-2"></i>Send Reply
+                    </h5>
+                    <textarea class="form-control mb-3" rows="4" 
+                        [(ngModel)]="replyMessage"
+                        placeholder="Type your reply here..."></textarea>
+                    <button class="btn btn-primary" (click)="sendReply()" [disabled]="!replyMessage.trim()">
+                        <i class="bi bi-send me-2"></i>Send Reply
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Actions -->
+        <div class="col-lg-4">
+            <!-- Assign Ticket Card -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-person-plus me-2"></i>Assign Ticket
+                    </h5>
+                    <select class="form-select mb-3" [(ngModel)]="selectedAdminId">
+                        <option value="">-- Select Admin --</option>
+                        <option *ngFor="let admin of admins()" [value]="admin.userId">
+                            {{admin.name || admin.email}}
+                        </option>
+                    </select>
+                    <button class="btn btn-primary w-100" 
+                        (click)="assignTicket()" 
+                        [disabled]="!selectedAdminId || saving()">
+                        <span *ngIf="saving()" class="spinner-border spinner-border-sm me-2"></span>
+                        <i class="bi bi-check-circle me-2" *ngIf="!saving()"></i>
+                        Assign
+                    </button>
+                </div>
+            </div>
+
+            <!-- Change Status Card -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-gear me-2"></i>Change Status
+                    </h5>
+                    <select class="form-select mb-3" [(ngModel)]="selectedStatus">
+                        <option value="open">Open</option>
+                        <option value="assigned">Assigned</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                    <button class="btn btn-success w-100" 
+                        (click)="updateStatus()" 
+                        [disabled]="saving()">
+                        <span *ngIf="saving()" class="spinner-border spinner-border-sm me-2"></span>
+                        <i class="bi bi-arrow-repeat me-2" *ngIf="!saving()"></i>
+                        Update Status
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading State -->
+<div class="container-fluid p-4 text-center" *ngIf="loading()">
+    <div class="spinner-border text-primary mt-5" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>

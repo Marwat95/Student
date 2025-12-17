@@ -1,0 +1,139 @@
+<div class="modal fade" [class.show]="isOpen" [style.display]="isOpen ? 'block' : 'none'" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+
+            <!-- Header -->
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-primary">
+                    <i class="bi bi-person-gear me-2"></i>Edit User
+                </h5>
+                <button type="button" class="btn-close" (click)="onClose()"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body p-4">
+
+                <!-- Loading State -->
+                <div *ngIf="loading()" class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div *ngIf="!loading() && user">
+
+                    <!-- Top Section: Photo & Basic Info -->
+                    <div class="row align-items-center mb-4">
+                        <!-- Photo Upload -->
+                        <div class="col-md-4 text-center">
+                            <div class="position-relative d-inline-block">
+                                <div class="avatar-circle-xl bg-light text-primary d-flex align-items-center justify-content-center rounded-circle border border-2 border-primary overflow-hidden"
+                                    style="width: 120px; height: 120px; font-size: 3rem;">
+                                    <img *ngIf="imagePreview" [src]="imagePreview" class="w-100 h-100 object-fit-cover">
+                                    <span *ngIf="!imagePreview">{{ user.name?.charAt(0) || 'U' }}</span>
+                                </div>
+                                <input type="file" #fileInput hidden (change)="onFileSelected($event)" accept="image/*">
+                                <button type="button"
+                                    class="btn btn-primary rounded-circle position-absolute bottom-0 end-0 shadow-sm"
+                                    style="width: 40px; height: 40px; right: 5px; bottom: 5px;"
+                                    (click)="fileInput.click()" title="Change Photo">
+                                    <i class="bi bi-camera-fill"></i>
+                                </button>
+                            </div>
+                            <div class="mt-2 text-muted small">ID: {{ user.userId || user.id }}</div>
+                        </div>
+
+                        <!-- Basic Form -->
+                        <div class="col-md-8">
+                            <form [formGroup]="activeForm">
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium">Full Name</label>
+                                    <input type="text" class="form-control" formControlName="name"
+                                        [class.is-invalid]="nameControl?.invalid && nameControl?.touched">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium">Email</label>
+                                    <input type="email" class="form-control bg-light" formControlName="email">
+                                    <!-- Disabled -->
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium">Role</label>
+                                    <select class="form-select" formControlName="role">
+                                        <option [ngValue]="0">Admin</option>
+                                        <option [ngValue]="1">Instructor</option>
+                                        <option [ngValue]="2">Student</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium">City</label>
+                                    <input type="text" class="form-control" formControlName="city"
+                                        placeholder="Please enter City">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium">Country</label>
+                                    <input type="text" class="form-control" formControlName="country"
+                                        placeholder="Please enter Country">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium">Phone Number</label>
+                                    <input type="tel" class="form-control" formControlName="phoneNumber"
+                                        placeholder="Please enter Phone Number">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium">Birth Date</label>
+                                    <input type="date" class="form-control" formControlName="birthDate"
+                                        placeholder="Please enter Birth Date">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <hr class="my-4 text-muted opacity-25">
+
+                    <!-- Password Section -->
+                    <h6 class="fw-bold text-danger mb-3"><i class="bi bi-shield-lock me-2"></i>Password Management</h6>
+
+
+
+                    <!-- Reset Password Form -->
+                    <h6 class="fw-bold text-warning mb-2">Reset Password (Optional)</h6>
+                    <form [formGroup]="passwordForm" class="bg-light p-3 rounded">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small text-muted">New Password</label>
+                                <input type="password" class="form-control form-control-sm"
+                                    formControlName="newPassword" placeholder="Min 6 chars">
+                                <small class="text-muted">Leave empty to keep current password</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small text-muted">Confirm Password</label>
+                                <input type="password" class="form-control form-control-sm"
+                                    formControlName="confirmPassword"
+                                    [class.is-invalid]="passwordForm.hasError('mismatch')">
+                                <div class="invalid-feedback">Passwords don't match</div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-light" (click)="onClose()">Cancel</button>
+                <button type="button" class="btn btn-primary px-4 fw-bold" (click)="saveAll()"
+                    [disabled]="activeForm.invalid || saving()">
+                    <span *ngIf="saving()" class="spinner-border spinner-border-sm me-2"></span>
+                    Save Changes
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop fade show" *ngIf="isOpen"></div>
