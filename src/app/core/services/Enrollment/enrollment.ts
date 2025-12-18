@@ -24,7 +24,7 @@ export class EnrollmentService {
       .set('pageSize', pageSize.toString());
 
     return this.http.get<PagedResult<EnrollmentDto>>(
-      `${this.apiUrl}/enrollments/student/${studentId}`,
+      `${environment.apiUrl}/enrollments/student/${studentId}`,
       { params }
     );
   }
@@ -38,7 +38,7 @@ export class EnrollmentService {
       .set('pageSize', pageSize.toString());
 
     return this.http.get<PagedResult<EnrollmentDto>>(
-      `${this.apiUrl}/enrollments/course/${courseId}`,
+      `${environment.apiUrl}/enrollments/course/${courseId}`,
       { params }
     );
   }
@@ -47,28 +47,28 @@ export class EnrollmentService {
    * Enroll in course (Student or Admin)
    */
   enrollInCourse(data: EnrollmentCreateDto): Observable<EnrollmentDto> {
-    return this.http.post<EnrollmentDto>(`${this.apiUrl}/enrollments`, data);
+    return this.http.post<EnrollmentDto>(`${environment.apiUrl}/enrollments`, data);
   }
 
   /**
    * Cancel enrollment (Student own or Admin)
    */
   cancelEnrollment(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/enrollments/${id}`);
+    return this.http.delete(`${environment.apiUrl}/enrollments/${id}`);
   }
 
   /**
    * Get enrollment progress (Student own, Instructor, or Admin)
    */
   getEnrollmentProgress(id: string): Observable<EnrollmentDto> {
-    return this.http.get<EnrollmentDto>(`${this.apiUrl}/enrollments/${id}/progress`);
+    return this.http.get<EnrollmentDto>(`${environment.apiUrl}/enrollments/${id}/progress`);
   }
 
   /**
    * Get course completion certificate (PDF)
    */
   getCertificate(id: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/enrollments/${id}/certificate`, {
+    return this.http.get(`${environment.apiUrl}/enrollments/${id}/certificate`, {
       responseType: 'blob'
     });
   }
@@ -77,6 +77,6 @@ export class EnrollmentService {
    * Update enrollment progress percentage (Student own or Admin)
    */
   updateProgress(id: string, progressPercentage: number): Observable<any> {
-    return this.http.put(`${this.apiUrl}/enrollments/${id}/progress`, progressPercentage);
+    return this.http.put(`${environment.apiUrl}/enrollments/${id}/progress`, progressPercentage);
   }
 }

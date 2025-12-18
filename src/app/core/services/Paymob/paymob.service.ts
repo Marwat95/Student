@@ -24,7 +24,7 @@ export class PaymobService {
     request: PaymobCoursePaymentRequest
   ): Observable<PaymentInitializationResponse> {
     return this.http.post<PaymentInitializationResponse>(
-      `${this.apiUrl}/paymob/initialize-course-payment`,
+      `${environment.apiUrl}/paymob/initialize-course-payment`,
       request
     );
   }
@@ -37,7 +37,7 @@ export class PaymobService {
     request: PaymobSubscriptionPaymentRequest
   ): Observable<PaymentInitializationResponse> {
     return this.http.post<PaymentInitializationResponse>(
-      `${this.apiUrl}/paymob/initialize-subscription-payment`,
+      `${environment.apiUrl}/paymob/initialize-subscription-payment`,
       request
     );
   }
@@ -52,7 +52,7 @@ export class PaymobService {
   ): Observable<PaymentVerificationResponse> {
     const params = transactionId ? `?transactionId=${transactionId}` : '';
     return this.http.get<PaymentVerificationResponse>(
-      `${this.apiUrl}/paymob/verify/${paymentId}${params}`
+      `${environment.apiUrl}/paymob/verify/${paymentId}${params}`
     );
   }
 

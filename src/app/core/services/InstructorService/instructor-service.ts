@@ -27,7 +27,7 @@ export class InstructorService {
     if (params?.pageSize) httpParams = httpParams.set('pageSize', params.pageSize);
     if (params?.search) httpParams = httpParams.set('search', params.search);
 
-    return this.http.get<any>(`${this.apiUrl}/users`, { params: httpParams }).pipe(
+    return this.http.get<any>(`${environment.apiUrl}/users`, { params: httpParams }).pipe(
       map(response => ({
         data: response.data.map((item: any) => this.mapToInstructorDto(item)),
         totalRecords: response.totalRecords
@@ -36,7 +36,7 @@ export class InstructorService {
   }
 
   getPublicInstructor(id: string): Observable<InstructorDto> {
-    return this.http.get<InstructorDto>(`${this.apiUrl}/instructors/${id}`);
+    return this.http.get<InstructorDto>(`${environment.apiUrl}/instructors/${id}`);
   }
 
   getTopInstructors(count: number = 4): Observable<InstructorDto[]> {

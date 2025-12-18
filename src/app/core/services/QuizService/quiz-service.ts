@@ -30,7 +30,7 @@ export class ExamService {
       .set('pageSize', pageSize.toString());
 
     return this.http.get<PagedResult<ExamDto>>(
-      `${this.apiUrl}/exams/course/${courseId}`,
+      `${environment.apiUrl}/exams/course/${courseId}`,
       { params }
     );
   }
@@ -39,63 +39,63 @@ export class ExamService {
    * Get exam by ID
    */
   getExamById(id: string): Observable<ExamDto> {
-    return this.http.get<ExamDto>(`${this.apiUrl}/exams/${id}`);
+    return this.http.get<ExamDto>(`${environment.apiUrl}/exams/${id}`);
   }
 
   /**
    * Create exam (Instructor or Admin)
    */
   createExam(data: CreateExamDto): Observable<ExamDto> {
-    return this.http.post<ExamDto>(`${this.apiUrl}/exams`, data);
+    return this.http.post<ExamDto>(`${environment.apiUrl}/exams`, data);
   }
 
   /**
    * Update exam (Instructor or Admin)
    */
   updateExam(id: string, data: UpdateExamDto): Observable<ExamDto> {
-    return this.http.put<ExamDto>(`${this.apiUrl}/exams/${id}`, data);
+    return this.http.put<ExamDto>(`${environment.apiUrl}/exams/${id}`, data);
   }
 
   /**
    * Delete exam (Instructor or Admin)
    */
   deleteExam(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/exams/${id}`);
+    return this.http.delete(`${environment.apiUrl}/exams/${id}`);
   }
 
   /**
    * Get all questions for an exam
    */
   getQuestionsByExamId(examId: string): Observable<ExamQuestionDto[]> {
-    return this.http.get<ExamQuestionDto[]>(`${this.apiUrl}/exam-questions/exam/${examId}`);
+    return this.http.get<ExamQuestionDto[]>(`${environment.apiUrl}/exam-questions/exam/${examId}`);
   }
 
   /**
    * Create a new question for an exam (Instructor or Admin)
    */
   createQuestion(examId: string, data: CreateExamQuestionDto): Observable<ExamQuestionDto> {
-    return this.http.post<ExamQuestionDto>(`${this.apiUrl}/exam-questions/exam/${examId}`, data);
+    return this.http.post<ExamQuestionDto>(`${environment.apiUrl}/exam-questions/exam/${examId}`, data);
   }
 
   /**
    * Update an exam question (Instructor or Admin)
    */
   updateQuestion(questionId: string, data: UpdateExamQuestionDto): Observable<ExamQuestionDto> {
-    return this.http.put<ExamQuestionDto>(`${this.apiUrl}/exam-questions/${questionId}`, data);
+    return this.http.put<ExamQuestionDto>(`${environment.apiUrl}/exam-questions/${questionId}`, data);
   }
 
   /**
    * Delete an exam question (Instructor or Admin)
    */
   deleteQuestion(questionId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/exam-questions/${questionId}`);
+    return this.http.delete(`${environment.apiUrl}/exam-questions/${questionId}`);
   }
 
   /**
    * Submit exam attempt (Student)
    */
   submitExamAttempt(examId: string, data: ExamAttemptSubmitDto): Observable<ExamAttemptDto> {
-    return this.http.post<ExamAttemptDto>(`${this.apiUrl}/exams/${examId}/submit`, data);
+    return this.http.post<ExamAttemptDto>(`${environment.apiUrl}/exams/${examId}/submit`, data);
   }
 
   /**
@@ -107,7 +107,7 @@ export class ExamService {
       .set('pageSize', pageSize.toString());
 
     return this.http.get<PagedResult<ExamAttemptDto>>(
-      `${this.apiUrl}/exams/${examId}/attempts`,
+      `${environment.apiUrl}/exams/${examId}/attempts`,
       { params }
     );
   }
@@ -116,6 +116,6 @@ export class ExamService {
    * Get detailed exam attempt result
    */
   getAttemptDetail(attemptId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/exams/attempts/${attemptId}`);
+    return this.http.get(`${environment.apiUrl}/exams/attempts/${attemptId}`);
   }
 }

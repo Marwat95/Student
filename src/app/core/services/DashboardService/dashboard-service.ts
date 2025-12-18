@@ -21,7 +21,7 @@ export class DashboardService {
    */
   getStudentDashboard(studentId: string): Observable<StudentDashboardDto> {
     return this.http.get<StudentDashboardDto>(
-      `${this.apiUrl}/dashboard/student/${studentId}`
+      `${environment.apiUrl}/dashboard/student/${studentId}`
     );
   }
 
@@ -29,9 +29,9 @@ export class DashboardService {
    * Get instructor dashboard data
    */
   getInstructorDashboard(instructorId: string): Observable<InstructorDashboardDto> {
-    const url = `${this.apiUrl}/dashboard/instructor/${instructorId}`;
+    const url = `${environment.apiUrl}/dashboard/instructor/${instructorId}`;
     console.log('📊 Dashboard Service:', {
-      apiUrl: this.apiUrl,
+      apiUrl: environment.apiUrl,
       fullUrl: url,
       instructorId
     });
@@ -43,7 +43,7 @@ export class DashboardService {
    */
   getAdminDashboard(): Observable<AdminDashboardDto> {
     return this.http.get<AdminDashboardDto>(
-      `${this.apiUrl}/dashboard/admin`
+      `${environment.apiUrl}/dashboard/admin`
     );
   }
 
@@ -51,21 +51,21 @@ export class DashboardService {
    * Get dashboard data (generic - for backward compatibility)
    */
   getDashboardData(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/dashboard/admin`);
+    return this.http.get(`${environment.apiUrl}/dashboard/admin`);
   }
 
   /**
    * Get users list (for admin dashboard)
    */
   getUsers(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/users`);
+    return this.http.get(`${environment.apiUrl}/users`);
   }
 
   /**
    * Get courses list (for admin dashboard)
    */
   getCourses(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/courses`);
+    return this.http.get(`${environment.apiUrl}/courses`);
   }
 
   /**

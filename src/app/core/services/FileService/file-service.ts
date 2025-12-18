@@ -25,7 +25,7 @@ export class FileService {
       formData.append('entityId', entityId);
     }
 
-    return this.http.post<FileUploadResponse>(`${this.apiUrl}/files/upload`, formData);
+    return this.http.post<FileUploadResponse>(`${environment.apiUrl}/files/upload`, formData);
   }
 
   /**
@@ -33,7 +33,7 @@ export class FileService {
    * @param fileId The file ID
    */
   getFile(fileId: string): Observable<FileDto> {
-    return this.http.get<FileDto>(`${this.apiUrl}/files/${fileId}`);
+    return this.http.get<FileDto>(`${environment.apiUrl}/files/${fileId}`);
   }
 
   /**
@@ -41,7 +41,7 @@ export class FileService {
    * @param fileId The file ID
    */
   downloadFile(fileId: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/files/${fileId}`, {
+    return this.http.get(`${environment.apiUrl}/files/${fileId}`, {
       responseType: 'blob',
     });
   }
@@ -51,7 +51,7 @@ export class FileService {
    * @param fileId The file ID
    */
   deleteFile(fileId: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/files/${fileId}`);
+    return this.http.delete<any>(`${environment.apiUrl}/files/${fileId}`);
   }
 
   /**
@@ -60,6 +60,6 @@ export class FileService {
    */
   getFileUrl(fileId: string): string {
     // Return the download endpoint that streams the file content
-    return `${this.apiUrl}/files/${fileId}/download`;
+    return `${environment.apiUrl}/files/${fileId}/download`;
   }
 }

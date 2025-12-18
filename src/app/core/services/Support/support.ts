@@ -24,7 +24,7 @@ export class SupportService {
       .set('pageSize', pageSize.toString());
 
     return this.http.get<SupportApiResponse<SupportTicketDto>>(
-      `${this.apiUrl}/support/tickets/user/${userId}`,
+      `${environment.apiUrl}/support/tickets/user/${userId}`,
       { params }
     );
   }
@@ -33,7 +33,7 @@ export class SupportService {
    * Create new support ticket
    */
   createTicket(data: SupportTicketCreateDto): Observable<SupportTicketDto> {
-    return this.http.post<SupportTicketDto>(`${this.apiUrl}/support/tickets`, data);
+    return this.http.post<SupportTicketDto>(`${environment.apiUrl}/support/tickets`, data);
   }
 
   /**
@@ -48,7 +48,7 @@ export class SupportService {
       .set('pageSize', pageSize.toString());
 
     return this.http.get<PagedResult<SupportTicketDto>>(
-      `${this.apiUrl}/support/tickets`,
+      `${environment.apiUrl}/support/tickets`,
       { params }
     );
   }
@@ -57,7 +57,7 @@ export class SupportService {
    * Get ticket by ID
    */
   getTicketById(id: string): Observable<SupportTicketDto> {
-    return this.http.get<SupportTicketDto>(`${this.apiUrl}/support/tickets/${id}`);
+    return this.http.get<SupportTicketDto>(`${environment.apiUrl}/support/tickets/${id}`);
   }
 
   /**
@@ -65,7 +65,7 @@ export class SupportService {
    */
   assignTicket(ticketId: string, adminId: string): Observable<any> {
     return this.http.put<any>(
-      `${this.apiUrl}/support/tickets/${ticketId}/assign/${adminId}`,
+      `${environment.apiUrl}/support/tickets/${ticketId}/assign/${adminId}`,
       {}
     );
   }
@@ -75,7 +75,7 @@ export class SupportService {
    */
   resolveTicket(ticketId: string): Observable<any> {
     return this.http.put<any>(
-      `${this.apiUrl}/support/tickets/${ticketId}/resolve`,
+      `${environment.apiUrl}/support/tickets/${ticketId}/resolve`,
       {}
     );
   }
@@ -84,6 +84,6 @@ export class SupportService {
    * Delete ticket (Admin only)
    */
   deleteTicket(ticketId: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/support/tickets/${ticketId}`);
+    return this.http.delete<any>(`${environment.apiUrl}/support/tickets/${ticketId}`);
   }
 }

@@ -17,19 +17,19 @@ export class AffiliateService {
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
 
-    return this.http.get<PagedResult<AffiliateDto>>(`${this.apiUrl}/affiliates`, { params });
+    return this.http.get<PagedResult<AffiliateDto>>(`${environment.apiUrl}/affiliates`, { params });
   }
 
   getAffiliateById(id: string): Observable<AffiliateDto> {
-    return this.http.get<AffiliateDto>(`${this.apiUrl}/affiliates/${id}`);
+    return this.http.get<AffiliateDto>(`${environment.apiUrl}/affiliates/${id}`);
   }
 
   getAffiliateByUserId(userId: string): Observable<AffiliateDto> {
-    return this.http.get<AffiliateDto>(`${this.apiUrl}/affiliates/user/${userId}`);
+    return this.http.get<AffiliateDto>(`${environment.apiUrl}/affiliates/user/${userId}`);
   }
 
   createAffiliate(data: AffiliateCreateDto): Observable<AffiliateDto> {
-    return this.http.post<AffiliateDto>(`${this.apiUrl}/affiliates`, data);
+    return this.http.post<AffiliateDto>(`${environment.apiUrl}/affiliates`, data);
   }
 
   getReferrals(
@@ -42,18 +42,18 @@ export class AffiliateService {
       .set('pageSize', pageSize.toString());
 
     return this.http.get<PagedResult<UserDto>>(
-      `${this.apiUrl}/affiliates/${affiliateId}/referrals`,
+      `${environment.apiUrl}/affiliates/${affiliateId}/referrals`,
       { params }
     );
   }
 
   getTotalCommission(affiliateId: string): Observable<{ affiliateId: string; totalCommission: number }> {
     return this.http.get<{ affiliateId: string; totalCommission: number }>(
-      `${this.apiUrl}/affiliates/${affiliateId}/commission`
+      `${environment.apiUrl}/affiliates/${affiliateId}/commission`
     );
   }
 
   processPayout(id: string, amount: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/affiliates/${id}/payout`, amount);
+    return this.http.post(`${environment.apiUrl}/affiliates/${id}/payout`, amount);
   }
 }
