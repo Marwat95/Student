@@ -1,7 +1,7 @@
 
 {
   "/api": {
-    "target": "http://mahd2.runasp.net",
+    "target": "http://mahd2.runasp.net/",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",
