@@ -32,7 +32,7 @@ export class AuthService {
     console.log('Device ID:', environment.deviceId);
 
     return this.http.post<AuthResponseDto>(
-      `${this.apiUrl}/auth/register`,
+      `http://mahd3.runasp.net/api/auth/register`,
       registerData,
       { headers }
     ).pipe(
