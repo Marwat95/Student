@@ -27,12 +27,12 @@ export class AuthService {
     const headers = new HttpHeaders({
       'X-Device-Id': environment.deviceId
     });
-
-    console.log('Registering user:', { apiUrl: environment.apiUrl, email: registerData.email });
+    const registerapiurl=`http://mahd3.runasp.net/api/auth/register`
+    console.log(registerapiurl);
     console.log('Device ID:', environment.deviceId);
 
     return this.http.post<AuthResponseDto>(
-      `http://mahd3.runasp.net/auth/register`,
+      registerapiurl,
       registerData,
       { headers }
     ).pipe(
@@ -52,7 +52,7 @@ export class AuthService {
     });
 
     return this.http.post<AuthResponseDto>(
-      `http://mahd3.runasp.net/auth/register`,
+      `http://mahd3.runasp.net/api/auth/register`,
       registerData,
       { headers }
     );
@@ -70,7 +70,7 @@ export class AuthService {
     console.log('Device ID:', environment.deviceId);
 
     return this.http.post<AuthResponseDto>(
-      `http://mahd3.runasp.net/auth/login`,
+      `http://mahd3.runasp.net/api/auth/login`,
       loginData,
       { headers }
     ).pipe(
@@ -90,7 +90,7 @@ export class AuthService {
     });
 
     return this.http.post<AuthResponseDto>(
-      `http://mahd3.runasp.net/auth/refresh-token`,
+      `http://mahd3.runasp.net/api/auth/refresh-token`,
       refreshToken,
       { headers }
     ).pipe(
@@ -104,7 +104,7 @@ export class AuthService {
   logout(): Observable<any> {
     const refreshToken = this.tokenService.getRefreshToken();
 
-    return this.http.post(`http://mahd3.runasp.net/auth/logout`, refreshToken).pipe(
+    return this.http.post(`http://mahd3.runasp.net/api/auth/logout`, refreshToken).pipe(
       tap(() => {
         this.tokenService.clearAll();
       })
@@ -116,7 +116,7 @@ export class AuthService {
    */
   verifyEmail(userId: string, code: string): Observable<any> {
     return this.http.post(
-      `http://mahd3.runasp.net/auth/verify-email?userId=${userId}&code=${code}`,
+      `http://mahd3.runasp.net/api/auth/verify-email?userId=${userId}&code=${code}`,
       {}
     );
   }
