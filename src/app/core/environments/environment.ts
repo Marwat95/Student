@@ -18,7 +18,7 @@ export const environment = {
 
 export const environmentProduction = {
   production: true,
-  apiUrl: 'https://mahdlms.runasp.net/api', // Update with your production API URL
+  apiUrl: 'https://mahd2.runasp.net/api', // Update with your production API URL
   deviceId: generateDeviceId()
 };
 
