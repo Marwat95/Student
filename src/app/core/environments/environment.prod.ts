@@ -10,7 +10,7 @@ function generateDeviceId(): string {
 
 export const environment = {
   production: true,
-  apiUrl: 'https://mahd2.runasp.net/api', // Update with your production API URL
+  apiUrl: 'http://mahd2.runasp.net/api', // Update with your production API URL
   deviceId: generateDeviceId()
 };
 
