@@ -157,6 +157,8 @@ export class InstructorSubscription implements OnInit {
           itemDescription: pkg.description,
           amount: finalPrice,
           currency: 'EGP',
+
+          
           subscriptionId: subscriptionId,
           customerEmail: user.email || '',
           customerFirstName: user.firstName || user.fullName?.split(' ')[0] || '',
