@@ -10,15 +10,7 @@ function generateDeviceId(): string {
 
 export const environment = {
   production: false,
-  // API requests will be proxied to http://mahd.runasp.net/api via proxy.conf.json
-  // This bypasses CORS issues during local development
-  apiUrl: '/api',
+  // pointing to production backend to bypass Vercel file replacement issues
+  apiUrl: 'https://mahd2.runasp.net/api', 
   deviceId: generateDeviceId()
 };
-
-export const environmentProduction = {
-  production: true,
-  apiUrl: 'http://mahd2.runasp.net/api', // Update with your production API URL
-  deviceId: generateDeviceId()
-};
-
