@@ -25,7 +25,7 @@ export class CourseService {
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
 
-    return this.http.get<any>(`${environment.apiUrl}/courses`, { params }).pipe(
+    return this.http.get<any>(`http://mahd3.runasp.net/api/courses`, { params }).pipe(
       map(response => ({
         items: response.data || response.items || [],
         totalCount: response.totalRecords || response.totalCount || 0,
@@ -40,7 +40,7 @@ export class CourseService {
    * Get course by ID (Public)
    */
   getCourseById(id: string): Observable<CourseDto> {
-    return this.http.get<CourseDto>(`${environment.apiUrl}/courses/${id}`);
+    return this.http.get<CourseDto>(`http://mahd3.runasp.net/api/courses/${id}`);
   }
 
   /**
@@ -52,7 +52,7 @@ export class CourseService {
       .set('pageSize', pageSize.toString());
 
     return this.http.get<any>(
-      `${environment.apiUrl}/courses/instructor/${instructorId}`,
+      `http://mahd3.runasp.net/api/courses/instructor/${instructorId}`,
       { params }
     ).pipe(
       map(response => ({
@@ -70,7 +70,7 @@ export class CourseService {
    */
   getPopularCourses(count: number = 10): Observable<CourseDto[]> {
     const params = new HttpParams().set('count', count.toString());
-    return this.http.get<CourseDto[]>(`${environment.apiUrl}/courses/popular`, { params });
+    return this.http.get<CourseDto[]>(`http://mahd3.runasp.net/api/courses/popular`, { params });
   }
 
   /**
@@ -82,7 +82,7 @@ export class CourseService {
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
 
-    return this.http.get<any>(`${environment.apiUrl}/courses/search`, { params }).pipe(
+    return this.http.get<any>(`http://mahd3.runasp.net/api/courses/search`, { params }).pipe(
       map(response => ({
         items: response.data || response.items || [],
         totalCount: response.totalRecords || response.totalCount || 0,
@@ -97,41 +97,41 @@ export class CourseService {
    * Create course (Instructor or Admin)
    */
   createCourse(data: CreateCourseDto): Observable<CourseDto> {
-    return this.http.post<CourseDto>(`${environment.apiUrl}/courses`, data);
+    return this.http.post<CourseDto>(`http://mahd3.runasp.net/api/courses`, data);
   }
 
   /**
    * Update course (Instructor own course or Admin)
    */
   updateCourse(id: string, data: UpdateCourseDto): Observable<CourseDto> {
-    return this.http.put<CourseDto>(`${environment.apiUrl}/courses/${id}`, data);
+    return this.http.put<CourseDto>(`http://mahd3.runasp.net/api/courses/${id}`, data);
   }
 
   /**
    * Delete course (Instructor own course or Admin)
    */
   deleteCourse(id: string): Observable<any> {
-    return this.http.delete(`${environment.apiUrl}/courses/${id}`);
+    return this.http.delete(`http://mahd3.runasp.net/api/courses/${id}`);
   }
 
   /**
    * Get course statistics (Instructor own course or Admin)
    */
   getCourseStatistics(id: string): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/courses/${id}/statistics`);
+    return this.http.get(`http://mahd3.runasp.net/api/courses/${id}/statistics`);
   }
 
   /**
    * Publish course (Instructor own course or Admin)
    */
   publishCourse(id: string): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/courses/${id}/publish`, {});
+    return this.http.post(`http://mahd3.runasp.net/api/courses/${id}/publish`, {});
   }
 
   /**
    * Unpublish course (Instructor own course or Admin)
    */
   unpublishCourse(id: string): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/courses/${id}/unpublish`, {});
+    return this.http.post(`http://mahd3.runasp.net/api/courses/${id}/unpublish`, {});
   }
 }

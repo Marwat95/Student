@@ -24,7 +24,7 @@ export class PaymentService {
       .set('pageSize', pageSize.toString());
 
     return this.http.get<PagedResult<PaymentDto>>(
-      `${environment.apiUrl}/payments/student/${studentId}`,
+      `http://mahd3.runasp.net/api/payments/student/${studentId}`,
       { params }
     );
   }
@@ -42,7 +42,7 @@ export class PaymentService {
       .set('pageSize', pageSize.toString());
 
     return this.http.get<PagedResult<PaymentDto>>(
-      `${environment.apiUrl}/payments/course/${courseId}`,
+      `http://mahd3.runasp.net/api/payments/course/${courseId}`,
       { params }
     );
   }
@@ -51,21 +51,21 @@ export class PaymentService {
    * Get single payment by id
    */
   getPaymentById(id: string): Observable<PaymentDto> {
-    return this.http.get<PaymentDto>(`${environment.apiUrl}/payments/${id}`);
+    return this.http.get<PaymentDto>(`http://mahd3.runasp.net/api/payments/${id}`);
   }
 
   /**
    * Process a payment (checkout)
    */
   processPayment(data: PaymentCreateDto): Observable<PaymentDto> {
-    return this.http.post<PaymentDto>(`${environment.apiUrl}/payments`, data);
+    return this.http.post<PaymentDto>(`http://mahd3.runasp.net/api/payments`, data);
   }
 
   /**
    * Get payment statistics (Admin only)
    */
   getPaymentStatistics(): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/payments/statistics`);
+    return this.http.get<any>(`http://mahd3.runasp.net/api/payments/statistics`);
   }
 
   /**
@@ -73,6 +73,6 @@ export class PaymentService {
    */
   refundPayment(id: string, refundAmount?: number): Observable<any> {
     const body = refundAmount ? { refundAmount } : {};
-    return this.http.post<any>(`${environment.apiUrl}/payments/${id}/refund`, body);
+    return this.http.post<any>(`http://mahd3.runasp.net/api/payments/${id}/refund`, body);
   }
 }

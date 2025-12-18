@@ -28,7 +28,7 @@ export class GroupService {
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
 
-    return this.http.get<any>(`${environment.apiUrl}/groups`, { params }).pipe(
+    return this.http.get<any>(`http://mahd3.runasp.net/api/groups`, { params }).pipe(
       map(response => ({
         items: response.data || response.items || [],
         totalCount: response.totalRecords || response.totalCount || 0,
@@ -43,7 +43,7 @@ export class GroupService {
    * Get group by ID
    */
   getGroupById(id: string): Observable<GroupDto> {
-    return this.http.get<GroupDto>(`${environment.apiUrl}/groups/${id}`);
+    return this.http.get<GroupDto>(`http://mahd3.runasp.net/api/groups/${id}`);
   }
 
   /**
@@ -55,7 +55,7 @@ export class GroupService {
       .set('pageSize', pageSize.toString());
 
     return this.http.get<any>(
-      `${environment.apiUrl}/groups/instructor/${instructorId}`,
+      `http://mahd3.runasp.net/api/groups/instructor/${instructorId}`,
       { params }
     ).pipe(
       map(response => ({
@@ -72,49 +72,49 @@ export class GroupService {
    * Create group (Instructor or Admin)
    */
   createGroup(data: CreateGroupDto): Observable<GroupDto> {
-    return this.http.post<GroupDto>(`${environment.apiUrl}/groups`, data);
+    return this.http.post<GroupDto>(`http://mahd3.runasp.net/api/groups`, data);
   }
 
   /**
    * Update group (Instructor or Admin)
    */
   updateGroup(id: string, data: UpdateGroupDto): Observable<GroupDto> {
-    return this.http.put<GroupDto>(`${environment.apiUrl}/groups/${id}`, data);
+    return this.http.put<GroupDto>(`http://mahd3.runasp.net/api/groups/${id}`, data);
   }
 
   /**
    * Delete group (Instructor or Admin)
    */
   deleteGroup(id: string): Observable<any> {
-    return this.http.delete(`${environment.apiUrl}/groups/${id}`);
+    return this.http.delete(`http://mahd3.runasp.net/api/groups/${id}`);
   }
 
   /**
    * Add student to group (Instructor or Admin)
    */
   addStudentToGroup(groupId: string, studentId: string): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/groups/${groupId}/students/${studentId}`, {});
+    return this.http.post(`http://mahd3.runasp.net/api/groups/${groupId}/students/${studentId}`, {});
   }
 
   /**
    * Add course to group (Instructor or Admin)
    */
   addCourseToGroup(groupId: string, courseId: string): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/groups/${groupId}/courses/${courseId}`, {});
+    return this.http.post(`http://mahd3.runasp.net/api/groups/${groupId}/courses/${courseId}`, {});
   }
 
   /**
    * Get courses by group ID
    */
   getCoursesByGroupId(groupId: string): Observable<CourseDto[]> {
-    return this.http.get<CourseDto[]>(`${environment.apiUrl}/groups/${groupId}/courses`);
+    return this.http.get<CourseDto[]>(`http://mahd3.runasp.net/api/groups/${groupId}/courses`);
   }
 
   /**
    * Get students in a group
    */
   getGroupStudents(groupId: string): Observable<UserDto[]> {
-    return this.http.get<UserDto[]>(`${environment.apiUrl}/groups/${groupId}/students`);
+    return this.http.get<UserDto[]>(`http://mahd3.runasp.net/api/groups/${groupId}/students`);
   }
 
   /**
@@ -126,7 +126,7 @@ export class GroupService {
       .set('pageSize', pageSize.toString());
 
     return this.http.get<any>(
-      `${environment.apiUrl}/groups/student/${studentId}`,
+      `http://mahd3.runasp.net/api/groups/student/${studentId}`,
       { params }
     ).pipe(
       map(response => ({
@@ -143,13 +143,13 @@ export class GroupService {
    * Remove course from group
    */
   removeCourseFromGroup(groupId: string, courseId: string): Observable<any> {
-    return this.http.delete(`${environment.apiUrl}/groups/${groupId}/courses/${courseId}`);
+    return this.http.delete(`http://mahd3.runasp.net/api/groups/${groupId}/courses/${courseId}`);
   }
 
   /**
    * Remove student from group (Instructor or Admin)
    */
   removeStudentFromGroup(groupId: string, studentId: string): Observable<any> {
-    return this.http.delete(`${environment.apiUrl}/groups/${groupId}/students/${studentId}`);
+    return this.http.delete(`http://mahd3.runasp.net/api/groups/${groupId}/students/${studentId}`);
   }
 }

@@ -23,7 +23,7 @@ export class CategoryService {
    * Get all categories
    */
   getAllCategories(): Observable<CategoryDto[]> {
-    return this.http.get<CategoryDto[]>(`${environment.apiUrl}/categories`).pipe(
+    return this.http.get<CategoryDto[]>(`http://mahd3.runasp.net/api/categories`).pipe(
       map((response: any) => {
         // Handle different response formats
         if (Array.isArray(response)) {
@@ -42,7 +42,7 @@ export class CategoryService {
    * Get category by ID
    */
   getCategoryById(id: string): Observable<CategoryDto> {
-    return this.http.get<CategoryDto>(`${environment.apiUrl}/categories/${id}`);
+    return this.http.get<CategoryDto>(`http://mahd3.runasp.net/api/categories/${id}`);
   }
 
   /**
@@ -57,7 +57,7 @@ export class CategoryService {
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
 
-    return this.http.get<any>(`${environment.apiUrl}/categories/${categoryId}/courses`, { params }).pipe(
+    return this.http.get<any>(`http://mahd3.runasp.net/api/categories/${categoryId}/courses`, { params }).pipe(
       map(response => ({
         items: response.data || response.items || [],
         totalCount: response.totalRecords || response.totalCount || 0,
@@ -72,20 +72,20 @@ export class CategoryService {
    * Create category (Admin only)
    */
   createCategory(data: { name: string; description?: string }): Observable<CategoryDto> {
-    return this.http.post<CategoryDto>(`${environment.apiUrl}/categories`, data);
+    return this.http.post<CategoryDto>(`http://mahd3.runasp.net/api/categories`, data);
   }
 
   /**
    * Update category (Admin only)
    */
   updateCategory(id: string, data: { name: string; description?: string }): Observable<CategoryDto> {
-    return this.http.put<CategoryDto>(`${environment.apiUrl}/categories/${id}`, data);
+    return this.http.put<CategoryDto>(`http://mahd3.runasp.net/api/categories/${id}`, data);
   }
 
   /**
    * Delete category (Admin only)
    */
   deleteCategory(id: string): Observable<any> {
-    return this.http.delete(`${environment.apiUrl}/categories/${id}`);
+    return this.http.delete(`http://mahd3.runasp.net/api/categories/${id}`);
   }
 }

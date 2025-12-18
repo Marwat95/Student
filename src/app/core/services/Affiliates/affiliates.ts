@@ -17,19 +17,19 @@ export class AffiliateService {
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
 
-    return this.http.get<PagedResult<AffiliateDto>>(`${environment.apiUrl}/affiliates`, { params });
+    return this.http.get<PagedResult<AffiliateDto>>(`http://mahd3.runasp.net/api/affiliates`, { params });
   }
 
   getAffiliateById(id: string): Observable<AffiliateDto> {
-    return this.http.get<AffiliateDto>(`${environment.apiUrl}/affiliates/${id}`);
+    return this.http.get<AffiliateDto>(`http://mahd3.runasp.net/api/affiliates/${id}`);
   }
 
   getAffiliateByUserId(userId: string): Observable<AffiliateDto> {
-    return this.http.get<AffiliateDto>(`${environment.apiUrl}/affiliates/user/${userId}`);
+    return this.http.get<AffiliateDto>(`http://mahd3.runasp.net/api/affiliates/user/${userId}`);
   }
 
   createAffiliate(data: AffiliateCreateDto): Observable<AffiliateDto> {
-    return this.http.post<AffiliateDto>(`${environment.apiUrl}/affiliates`, data);
+    return this.http.post<AffiliateDto>(`http://mahd3.runasp.net/api/affiliates`, data);
   }
 
   getReferrals(
@@ -42,18 +42,18 @@ export class AffiliateService {
       .set('pageSize', pageSize.toString());
 
     return this.http.get<PagedResult<UserDto>>(
-      `${environment.apiUrl}/affiliates/${affiliateId}/referrals`,
+      `http://mahd3.runasp.net/api/affiliates/${affiliateId}/referrals`,
       { params }
     );
   }
 
   getTotalCommission(affiliateId: string): Observable<{ affiliateId: string; totalCommission: number }> {
     return this.http.get<{ affiliateId: string; totalCommission: number }>(
-      `${environment.apiUrl}/affiliates/${affiliateId}/commission`
+      `http://mahd3.runasp.net/api/affiliates/${affiliateId}/commission`
     );
   }
 
   processPayout(id: string, amount: number): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/affiliates/${id}/payout`, amount);
+    return this.http.post(`http://mahd3.runasp.net/api/affiliates/${id}/payout`, amount);
   }
 }

@@ -18,44 +18,44 @@ export class AdminService {
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
 
-    return this.http.get<PagedResult<UserDto>>(`${environment.apiUrl}/users`, { params });
+    return this.http.get<PagedResult<UserDto>>(`http://mahd3.runasp.net/api/users`, { params });
   }
 
   getUserByEmail(email: string): Observable<UserDto> {
-    return this.http.get<UserDto>(`${environment.apiUrl}/users/email/${email}`);
+    return this.http.get<UserDto>(`http://mahd3.runasp.net/api/users/email/${email}`);
   }
 
   deleteUser(id: string): Observable<any> {
-    return this.http.delete(`${environment.apiUrl}/users/${id}`);
+    return this.http.delete(`http://mahd3.runasp.net/api/users/${id}`);
   }
 
   getUserById(id: string): Observable<UserDto> {
-    return this.http.get<UserDto>(`${environment.apiUrl}/users/${id}`);
+    return this.http.get<UserDto>(`http://mahd3.runasp.net/api/users/${id}`);
   }
 
   // Get user with password (Admin only - for edit purposes)
   getUserWithPassword(id: string): Observable<UserDto> {
-    return this.http.get<UserDto>(`${environment.apiUrl}/admin/users/${id}/with-password`);
+    return this.http.get<UserDto>(`http://mahd3.runasp.net/api/admin/users/${id}/with-password`);
   }
 
   updateUser(id: string, userData: any): Observable<UserDto> {
-    return this.http.put<UserDto>(`${environment.apiUrl}/users/${id}`, userData);
+    return this.http.put<UserDto>(`http://mahd3.runasp.net/api/users/${id}`, userData);
   }
 
   changeUserPassword(id: string, passwordData: any): Observable<any> {
-    return this.http.put(`${environment.apiUrl}/users/${id}/password`, passwordData);
+    return this.http.put(`http://mahd3.runasp.net/api/users/${id}/password`, passwordData);
   }
 
   // Update user role specifically
   updateUserRole(id: string, role: number): Observable<UserDto> {
-    return this.http.put<UserDto>(`${environment.apiUrl}/users/${id}/role`, { role });
+    return this.http.put<UserDto>(`http://mahd3.runasp.net/api/users/${id}/role`, { role });
   }
 
   // Upload user photo
   uploadUserPhoto(id: string, photoFile: File): Observable<any> {
     const formData = new FormData();
     formData.append('photo', photoFile);
-    return this.http.post(`${environment.apiUrl}/users/${id}/photo`, formData);
+    return this.http.post(`http://mahd3.runasp.net/api/users/${id}/photo`, formData);
   }
 
   // Courses (for admin courses management)
@@ -64,15 +64,15 @@ export class AdminService {
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
 
-    return this.http.get<PagedResult<CourseDto>>(`${environment.apiUrl}/courses`, { params });
+    return this.http.get<PagedResult<CourseDto>>(`http://mahd3.runasp.net/api/courses`, { params });
   }
 
   getCourseById(id: string): Observable<CourseDto> {
-    return this.http.get<CourseDto>(`${environment.apiUrl}/courses/${id}`);
+    return this.http.get<CourseDto>(`http://mahd3.runasp.net/api/courses/${id}`);
   }
 
   updateCourse(id: string, courseData: any): Observable<CourseDto> {
-    return this.http.put<CourseDto>(`${environment.apiUrl}/courses/${id}`, courseData);
+    return this.http.put<CourseDto>(`http://mahd3.runasp.net/api/courses/${id}`, courseData);
   }
 
   // Update course with image file
@@ -90,21 +90,21 @@ export class AdminService {
       formData.append('image', imageFile);
     }
 
-    return this.http.put<CourseDto>(`${environment.apiUrl}/courses/${id}`, formData);
+    return this.http.put<CourseDto>(`http://mahd3.runasp.net/api/courses/${id}`, formData);
   }
 
   deleteCourse(id: string): Observable<any> {
-    return this.http.delete(`${environment.apiUrl}/courses/${id}`);
+    return this.http.delete(`http://mahd3.runasp.net/api/courses/${id}`);
   }
 
   // Payments & Revenue
   getCourseRevenueStats(): Observable<any[]> {
     // Expected to return array of: { courseId, courseTitle, instructorName, totalRevenue, totalSales }
-    return this.http.get<any[]>(`${environment.apiUrl}/admin/payments/courses-revenue`);
+    return this.http.get<any[]>(`http://mahd3.runasp.net/api/admin/payments/courses-revenue`);
   }
 
   getMonthlyRevenue(): Observable<{ totalRevenue: number }> {
     // Expected to return: { totalRevenue: number } for current month
-    return this.http.get<{ totalRevenue: number }>(`${environment.apiUrl}/admin/payments/monthly-revenue`);
+    return this.http.get<{ totalRevenue: number }>(`http://mahd3.runasp.net/api/admin/payments/monthly-revenue`);
   }
 }

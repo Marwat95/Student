@@ -21,7 +21,7 @@ export class DashboardService {
    */
   getStudentDashboard(studentId: string): Observable<StudentDashboardDto> {
     return this.http.get<StudentDashboardDto>(
-      `${environment.apiUrl}/dashboard/student/${studentId}`
+      `http://mahd3.runasp.net/api/dashboard/student/${studentId}`
     );
   }
 
@@ -29,7 +29,7 @@ export class DashboardService {
    * Get instructor dashboard data
    */
   getInstructorDashboard(instructorId: string): Observable<InstructorDashboardDto> {
-    const url = `${environment.apiUrl}/dashboard/instructor/${instructorId}`;
+    const url = `http://mahd3.runasp.net/api/dashboard/instructor/${instructorId}`;
     console.log('📊 Dashboard Service:', {
       apiUrl: environment.apiUrl,
       fullUrl: url,
@@ -43,7 +43,7 @@ export class DashboardService {
    */
   getAdminDashboard(): Observable<AdminDashboardDto> {
     return this.http.get<AdminDashboardDto>(
-      `${environment.apiUrl}/dashboard/admin`
+      `http://mahd3.runasp.net/api/dashboard/admin`
     );
   }
 
@@ -51,21 +51,21 @@ export class DashboardService {
    * Get dashboard data (generic - for backward compatibility)
    */
   getDashboardData(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/dashboard/admin`);
+    return this.http.get(`http://mahd3.runasp.net/api/dashboard/admin`);
   }
 
   /**
    * Get users list (for admin dashboard)
    */
   getUsers(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/users`);
+    return this.http.get(`http://mahd3.runasp.net/api/users`);
   }
 
   /**
    * Get courses list (for admin dashboard)
    */
   getCourses(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/courses`);
+    return this.http.get(`http://mahd3.runasp.net/api/courses`);
   }
 
   /**
