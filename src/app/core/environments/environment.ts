@@ -11,6 +11,6 @@ function generateDeviceId(): string {
 export const environment = {
   production: false,
   // pointing to production backend to bypass Vercel file replacement issues
-  apiUrl: 'https://mahd2.runasp.net/api', 
+  apiUrl: 'http://mahd3.runasp.net/api', 
   deviceId: generateDeviceId()
 };
